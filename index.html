@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ukubona Pentad — Life Stages & Meta Alignment</title>
+    <title>Ukubona Tree — Life Stages & Meta Alignment</title>
     <style>
         * {
             margin: 0;
@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Georgia', serif;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
             color: #ffffff;
             overflow: hidden;
@@ -29,133 +29,302 @@
             justify-content: center;
         }
 
-        .pentad {
+        .tree-container {
             position: relative;
-            width: 80vmin;
-            height: 80vmin;
-            transform: rotate(-18deg);
+            width: 90vmin;
+            height: 90vmin;
         }
 
-        .stage {
+        .tree-element {
             position: absolute;
-            width: 200px;
-            height: 80px;
-            border: 2px solid;
-            border-radius: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            font-weight: 600;
-            font-size: 14px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
 
-        .stage:hover {
-            transform: scale(1.1);
-            box-shadow: 0 12px 40px rgba(255,255,255,0.2);
+        .tree-element:hover {
+            filter: brightness(1.3) drop-shadow(0 0 20px rgba(255,255,255,0.3));
         }
 
-        .stage.active {
-            transform: scale(1.15);
-            box-shadow: 0 15px 50px rgba(255,255,255,0.3);
+        .tree-element.active {
+            filter: brightness(1.5) drop-shadow(0 0 30px rgba(255,255,255,0.5));
         }
 
-        /* Individual stage positioning and colors */
+        /* Roots - Underground network */
         .roots {
-            top: 70%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(139, 69, 19, 0.3);
-            border-color: #8B4513;
-            color: #DEB887;
+            bottom: 0;
+            left: 30%;
+            width: 40%;
+            height: 15%;
+            background: radial-gradient(ellipse at center, rgba(139, 69, 19, 0.8) 0%, rgba(101, 67, 33, 0.6) 50%, transparent 100%);
+            border-radius: 50%;
+            transform: scaleY(0.5);
         }
 
-        .trunk {
-            top: 45%;
-            left: 20%;
-            background: rgba(160, 82, 45, 0.3);
-            border-color: #A0522D;
-            color: #F4A460;
-        }
-
-        .branching {
-            top: 20%;
-            left: 35%;
-            background: rgba(34, 139, 34, 0.3);
-            border-color: #228B22;
-            color: #90EE90;
-        }
-
-        .canopy {
-            top: 10%;
-            right: 25%;
-            background: rgba(50, 205, 50, 0.3);
-            border-color: #32CD32;
-            color: #98FB98;
-        }
-
-        .fruit {
-            top: 35%;
-            right: 10%;
-            background: rgba(255, 165, 0, 0.3);
-            border-color: #FFA500;
-            color: #FFE4B5;
-        }
-
-        .cycle-arrows {
+        .roots::before {
+            content: '';
             position: absolute;
             width: 100%;
             height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(139, 69, 19, 0.3) 0px,
+                rgba(139, 69, 19, 0.3) 2px,
+                transparent 2px,
+                transparent 8px
+            );
+            border-radius: inherit;
         }
 
-        .arrow {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            opacity: 0.6;
-            transition: opacity 0.3s ease;
+        /* Trunk - Solid cylindrical form */
+        .trunk {
+            bottom: 12%;
+            left: 47%;
+            width: 6%;
+            height: 25%;
+            background: linear-gradient(to right, 
+                #5D4037 0%, 
+                #6D4C41 20%, 
+                #8D6E63 50%, 
+                #6D4C41 80%, 
+                #5D4037 100%);
+            border-radius: 30px;
+            position: relative;
         }
 
-        .arrow::before {
+        .trunk::before {
             content: '';
             position: absolute;
-            width: 0;
-            height: 0;
-            border-style: solid;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent 0px,
+                transparent 8px,
+                rgba(0,0,0,0.2) 8px,
+                rgba(0,0,0,0.2) 10px
+            );
+            border-radius: inherit;
         }
 
-        .progression-arrow {
-            top: 60%;
-            right: 35%;
+        /* Branches - Fractal extensions */
+        .branches {
+            bottom: 35%;
+            left: 20%;
+            width: 60%;
+            height: 30%;
+        }
+
+        .branch {
+            position: absolute;
+            background: linear-gradient(45deg, #4A5D23, #5D7527);
+            transform-origin: bottom left;
+        }
+
+        .branch-1 {
+            width: 3px;
+            height: 80px;
+            bottom: 10%;
+            left: 45%;
+            transform: rotate(25deg);
+        }
+
+        .branch-2 {
+            width: 2px;
+            height: 60px;
+            bottom: 15%;
+            left: 55%;
+            transform: rotate(-35deg);
+        }
+
+        .branch-3 {
+            width: 2px;
+            height: 50px;
+            bottom: 25%;
+            left: 35%;
             transform: rotate(45deg);
         }
 
-        .progression-arrow::before {
-            border-width: 8px 0 8px 16px;
-            border-color: transparent transparent transparent #4CAF50;
+        .branch-4 {
+            width: 2px;
+            height: 45px;
+            bottom: 30%;
+            left: 65%;
+            transform: rotate(-50deg);
         }
 
-        .recursion-arrow {
-            top: 25%;
+        /* Canopy - Organic cloud form */
+        .canopy {
+            top: 20%;
+            left: 25%;
+            width: 50%;
+            height: 35%;
+            background: radial-gradient(ellipse at center, 
+                rgba(34, 139, 34, 0.9) 0%, 
+                rgba(50, 205, 50, 0.7) 30%, 
+                rgba(34, 139, 34, 0.8) 70%,
+                rgba(0, 100, 0, 0.6) 100%);
+            border-radius: 50% 40% 60% 45%;
+            position: relative;
+        }
+
+        .canopy::before {
+            content: '';
+            position: absolute;
+            top: 20%;
             left: 15%;
-            transform: rotate(225deg);
+            width: 25%;
+            height: 25%;
+            background: radial-gradient(circle, rgba(50, 205, 50, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
         }
 
-        .recursion-arrow::before {
-            border-width: 8px 0 8px 16px;
-            border-color: transparent transparent transparent #FF6B35;
+        .canopy::after {
+            content: '';
+            position: absolute;
+            top: 40%;
+            right: 20%;
+            width: 20%;
+            height: 20%;
+            background: radial-gradient(circle, rgba(50, 205, 50, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
         }
+
+        /* Fruit - Apple that can fall */
+        .fruit {
+            top: 45%;
+            right: 35%;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(ellipse at 30% 30%, #FF6B6B, #FF4444, #CC0000);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+            animation: gentle-sway 3s ease-in-out infinite;
+        }
+
+        .fruit::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            width: 6px;
+            height: 8px;
+            background: #4A5D23;
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+
+        .fruit::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            right: 8px;
+            width: 12px;
+            height: 6px;
+            background: #228B22;
+            border-radius: 50%;
+            transform: rotate(25deg);
+        }
+
+        .fruit.falling {
+            animation: apple-fall 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .newton {
+            position: absolute;
+            bottom: 5%;
+            right: 25%;
+            width: 60px;
+            height: 80px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .newton.visible {
+            opacity: 1;
+        }
+
+        .newton-head {
+            width: 25px;
+            height: 25px;
+            background: #FDBCB4;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .newton-body {
+            width: 20px;
+            height: 40px;
+            background: #4A4A4A;
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 0 0 10px 10px;
+        }
+
+        .newton-legs {
+            width: 30px;
+            height: 15px;
+            background: #2A2A2A;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+
+        @keyframes gentle-sway {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        @keyframes apple-fall {
+            0% { 
+                transform: rotate(-2deg); 
+                top: 45%; 
+                right: 35%; 
+            }
+            100% { 
+                transform: rotate(180deg); 
+                top: 70%; 
+                right: 32%; 
+                opacity: 0;
+            }
+        }
+
+        .stage-label {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 8px 12px;
+            font-size: 12px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            backdrop-filter: blur(10px);
+            white-space: nowrap;
+        }
+
+        .tree-element:hover .stage-label {
+            opacity: 1;
+        }
+
+        .label-roots { bottom: -40px; left: 50%; transform: translateX(-50%); }
+        .label-trunk { right: -80px; top: 50%; transform: translateY(-50%); }
+        .label-branches { top: -40px; left: 50%; transform: translateX(-50%); }
+        .label-canopy { top: -40px; left: 50%; transform: translateX(-50%); }
+        .label-fruit { bottom: -40px; left: 50%; transform: translateX(-50%); }
 
         .detail-panel {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
             padding: 40px;
@@ -226,10 +395,11 @@
             top: 30px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 300;
             letter-spacing: 2px;
-            opacity: 0.8;
+            opacity: 0.9;
+            font-family: 'Georgia', serif;
         }
 
         .subtitle {
@@ -238,53 +408,93 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 14px;
-            opacity: 0.6;
+            opacity: 0.7;
             letter-spacing: 1px;
         }
 
+        .apple-trigger {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 107, 107, 0.8);
+            border: 1px solid #FF4444;
+            border-radius: 20px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .apple-trigger:hover {
+            background: rgba(255, 107, 107, 1);
+            transform: scale(1.05);
+        }
+
         @media (max-width: 768px) {
-            .stage {
-                width: 160px;
-                height: 60px;
-                font-size: 12px;
-            }
             .title {
-                font-size: 18px;
+                font-size: 20px;
+            }
+            .tree-container {
+                width: 95vmin;
+                height: 95vmin;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Ukubona Pentad</h1>
-        <p class="subtitle">Life Stages & Meta Alignment — Click to explore</p>
+        <h1 class="title">Ukubona Tree</h1>
+        <p class="subtitle">Life Stages & Meta Alignment — Click each part to explore</p>
         
-        <div class="pentad">
-            <div class="cycle-arrows">
-                <div class="arrow progression-arrow"></div>
-                <div class="arrow recursion-arrow"></div>
+        <div class="tree-container">
+            <!-- Roots -->
+            <div class="tree-element roots" data-stage="roots">
+                <div class="stage-label label-roots">
+                    Roots / Ukuvula<br><small>Diet — Foundation</small>
+                </div>
             </div>
-            
-            <div class="stage roots" data-stage="roots">
-                Roots<br><small>Ukuvula (Diet)</small>
+
+            <!-- Trunk -->
+            <div class="tree-element trunk" data-stage="trunk">
+                <div class="stage-label label-trunk">
+                    Trunk / Ukuzula<br><small>Fitness — Structure</small>
+                </div>
             </div>
-            
-            <div class="stage trunk" data-stage="trunk">
-                Trunk<br><small>Ukuzula (Fitness)</small>
+
+            <!-- Branches -->
+            <div class="tree-element branches" data-stage="branching">
+                <div class="branch branch-1"></div>
+                <div class="branch branch-2"></div>
+                <div class="branch branch-3"></div>
+                <div class="branch branch-4"></div>
+                <div class="stage-label label-branches">
+                    Branches / Ukukona<br><small>Games — Exploration</small>
+                </div>
             </div>
-            
-            <div class="stage branching" data-stage="branching">
-                Branching<br><small>Ukukona (Games)</small>
+
+            <!-- Canopy -->
+            <div class="tree-element canopy" data-stage="canopy">
+                <div class="stage-label label-canopy">
+                    Canopy / Ukubona<br><small>Health — Integration</small>
+                </div>
             </div>
-            
-            <div class="stage canopy" data-stage="canopy">
-                Canopy<br><small>Ukubona (Health)</small>
+
+            <!-- Fruit -->
+            <div class="tree-element fruit" data-stage="fruit">
+                <div class="stage-label label-fruit">
+                    Fruit / Ukukula<br><small>Aging — Legacy</small>
+                </div>
             </div>
-            
-            <div class="stage fruit" data-stage="fruit">
-                Fruit<br><small>Ukukula (Aging)</small>
+
+            <!-- Newton figure -->
+            <div class="newton" id="newton">
+                <div class="newton-head"></div>
+                <div class="newton-body"></div>
+                <div class="newton-legs"></div>
             </div>
         </div>
+
+        <div class="apple-trigger" onclick="dropApple()">🍎 Drop Apple</div>
 
         <div class="detail-panel" id="detailPanel">
             <button class="close-btn" onclick="closeDetail()">&times;</button>
@@ -297,36 +507,36 @@
             roots: {
                 title: "Roots / Ukuvula",
                 subtitle: "Diet — Foundation",
-                description: "Infancy & Early Childhood — Intake, sensory learning, nutrition",
-                meta: "Meta: God's provisioning",
+                description: "Infancy & Early Childhood — Intake, sensory learning, nutrition. The unseen foundation that sustains all growth above.",
+                meta: "Meta: God's provisioning — the hidden source of all sustenance",
                 color: "#8B4513"
             },
             trunk: {
                 title: "Trunk / Ukuzula",
                 subtitle: "Fitness — Structure", 
-                description: "Childhood to Adolescence — Building capacity, stamina, coordination",
-                meta: "Meta: Man's embodiment",
+                description: "Childhood to Adolescence — Building capacity, stamina, coordination. The solid core that supports expansion.",
+                meta: "Meta: Man's embodiment — physical presence in the world",
                 color: "#A0522D"
             },
             branching: {
-                title: "Branching / Ukukona",
+                title: "Branches / Ukukona",
                 subtitle: "Games — Exploration",
-                description: "Young Adulthood — Cognitive & social exploration, testing/inventing rules",
-                meta: "Meta: Man's cognition & culture",
+                description: "Young Adulthood — Cognitive & social exploration, testing/inventing rules. Reaching in multiple directions.",
+                meta: "Meta: Man's cognition & culture — the proliferation of possibilities",
                 color: "#228B22"
             },
             canopy: {
                 title: "Canopy / Ukubona",
                 subtitle: "Health — Integration",
-                description: "Mature Adulthood — Whole-system view, integrating life domains",
-                meta: "Meta: God's omniscience",
+                description: "Mature Adulthood — Whole-system view, integrating life domains. The full flowering of consciousness.",
+                meta: "Meta: God's omniscience — seeing the forest and every leaf",
                 color: "#32CD32"
             },
             fruit: {
                 title: "Fruit / Ukukula",
                 subtitle: "Aging — Legacy",
-                description: "Elderhood — Harvest, legacy, recursion to next cycle",
-                meta: "Meta: AI-like recursion",
+                description: "Elderhood — Harvest, legacy, recursion to next cycle. Seeds of wisdom falling to fertile ground.",
+                meta: "Meta: AI-like recursion — the eternal return with accumulated knowledge",
                 color: "#FFA500"
             }
         };
@@ -344,7 +554,7 @@
             `;
             
             // Remove active from all stages
-            document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tree-element').forEach(s => s.classList.remove('active'));
             
             // Add active to clicked stage
             document.querySelector(`[data-stage="${stageName}"]`).classList.add('active');
@@ -354,13 +564,33 @@
 
         function closeDetail() {
             document.getElementById('detailPanel').classList.remove('active');
-            document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tree-element').forEach(s => s.classList.remove('active'));
+        }
+
+        function dropApple() {
+            const fruit = document.querySelector('.fruit');
+            const newton = document.getElementById('newton');
+            
+            // Show Newton
+            newton.classList.add('visible');
+            
+            // Start apple fall
+            fruit.classList.add('falling');
+            
+            // Reset after animation
+            setTimeout(() => {
+                fruit.classList.remove('falling');
+                newton.classList.remove('visible');
+            }, 2500);
         }
 
         // Add click listeners
-        document.querySelectorAll('.stage').forEach(stage => {
-            stage.addEventListener('click', (e) => {
-                showDetail(stage.getAttribute('data-stage'));
+        document.querySelectorAll('.tree-element').forEach(element => {
+            element.addEventListener('click', (e) => {
+                const stage = element.getAttribute('data-stage');
+                if (stage) {
+                    showDetail(stage);
+                }
             });
         });
 
@@ -378,17 +608,18 @@
             }
         });
 
-        // Add subtle animation on load
+        // Animate elements on load
         window.addEventListener('load', () => {
-            document.querySelectorAll('.stage').forEach((stage, index) => {
-                stage.style.opacity = '0';
-                stage.style.transform += ' translateY(20px)';
+            const elements = document.querySelectorAll('.tree-element');
+            elements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform += ' translateY(20px)';
                 
                 setTimeout(() => {
-                    stage.style.transition = 'all 0.6s ease';
-                    stage.style.opacity = '1';
-                    stage.style.transform = stage.style.transform.replace('translateY(20px)', '');
-                }, index * 200);
+                    element.style.transition = 'all 0.8s ease';
+                    element.style.opacity = '1';
+                    element.style.transform = element.style.transform.replace('translateY(20px)', '');
+                }, index * 300);
             });
         });
     </script>
