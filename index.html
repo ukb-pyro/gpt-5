@@ -1,634 +1,276 @@
-.branch {
-            position: absolute;
-            background: linear-gradient(to right, #4A5D23, #5D7527);
-            border-radius: 2px;
-        }
-
-        .branch-1 {
-            width: 100px;
-            height: 4px;
-            top: 70%;
-            left: 35%;
-            transform: rotate(10deg);
-        }
-
-        .branch-2 {
-            width: 80px;
-            height: 3px;
-            top: 40%;
-            left: 55%;
-            transform: rotate(-20deg);
-        }
-
-        .branch-3 {
-            width: 90px;
-            height: 3px;
-            top: 10%;
-            left: 20%;
-            transform: rotate(25deg);
-        }
-
-        .branch-4 {
-            width: 70px;
-            height: 2px;
-            top: 80%;
-            left: 65%;
-            transform: rotate(-35deg);
-        }
-
-        .branch-5 {
-            width: 85px;
-            height: 3px;
-            top: 55%;
-            left: 25%;
-            transform: rotate(-5deg);
-        }        .roots::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                45deg,
-                rgba(139, 69, 19, 0.3) 0px,
-                rgba(139, 69, 19, 0.3) 2px,
-                transparent 2px,
-                transparent 8px
-            );
-            border-radius: inherit;
-        }
-
-        .trunk::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent 0px,
-                transparent 8px,
-                rgba(0,0,0,0.2) 8px,
-                rgba(0,0,0,0.2) 10px
-            );
-            border-radius: inherit;
-        }
-
-        .canopy::before {
-            content: '';
-            position: absolute;
-            top: 20%;
-            left: 15%;
-            width: 25%;
-            height: 25%;
-            background: radial-gradient(circle, rgba(50, 205, 50, 0.6) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
-        .canopy::after {
-            content: '';
-            position: absolute;
-            top: 40%;
-            right: 20%;
-            width: 20%;
-            height: 20%;
-            background: radial-gradient(circle, rgba(50, 205, 50, 0.6) 0%, transparent 70%);
-            border-radius: 50%;
-        }<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ukubona Tree — Life Stages & Meta Alignment</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-            color: #ffffff;
-            overflow: hidden;
-            height: 100vh;
-            cursor: default;
-        }
-
-        .container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .tree-container {
-            position: relative;
-            width: 90vmin;
-            height: 90vmin;
-        }
-
-        .tree-element {
-            position: absolute;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .tree-element:hover {
-            filter: brightness(1.3) drop-shadow(0 0 20px rgba(255,255,255,0.3));
-        }
-
-        .tree-element.active {
-            filter: brightness(1.5) drop-shadow(0 0 30px rgba(255,255,255,0.5));
-        }
-
-        /* Roots - At the very BOTTOM (infancy) */
-        .roots {
-            bottom: 0%;
-            left: 35%;
-            width: 30%;
-            height: 10%;
-            background: radial-gradient(ellipse at center, rgba(139, 69, 19, 0.8) 0%, rgba(101, 67, 33, 0.6) 50%, transparent 100%);
-            border-radius: 50%;
-            transform: scaleY(0.6);
-        }
-
-        /* Trunk - Starting FROM the roots, going UP */
-        .trunk {
-            bottom: 10%;
-            left: 47%;
-            width: 6%;
-            height: 25%;
-            background: linear-gradient(to right, 
-                #5D4037 0%, 
-                #6D4C41 20%, 
-                #8D6E63 50%, 
-                #6D4C41 80%, 
-                #5D4037 100%);
-            border-radius: 30px;
-            position: relative;
-        }
-
-        /* Branches - Starting WHERE trunk ends */
-        .branches {
-            bottom: 35%;
-            left: 15%;
-            width: 70%;
-            height: 15%;
-            z-index: 2;
-        }
-
-        /* Canopy - At the very TOP */
-        .canopy {
-            bottom: 50%;
-            left: 25%;
-            width: 50%;
-            height: 25%;
-            background: radial-gradient(ellipse at center, 
-                rgba(34, 139, 34, 0.9) 0%, 
-                rgba(50, 205, 50, 0.7) 30%, 
-                rgba(34, 139, 34, 0.8) 70%,
-                rgba(0, 100, 0, 0.6) 100%);
-            border-radius: 50% 40% 60% 45%;
-            position: relative;
-        }
-
-        /* Fruit - INSIDE the canopy at the top */
-        .fruit {
-            bottom: 55%;
-            left: 60%;
-            width: 30px;
-            height: 30px;
-            background: radial-gradient(ellipse at 30% 30%, #FF6B6B, #FF4444, #CC0000);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            position: absolute;
-            animation: gentle-sway 3s ease-in-out infinite;
-            z-index: 4;
-        }
-
-        .fruit::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: 50%;
-            width: 6px;
-            height: 8px;
-            background: #4A5D23;
-            border-radius: 50%;
-            transform: translateX(-50%);
-        }
-
-        .fruit::after {
-            content: '';
-            position: absolute;
-            top: -3px;
-            right: 8px;
-            width: 12px;
-            height: 6px;
-            background: #228B22;
-            border-radius: 50%;
-            transform: rotate(25deg);
-        }
-
-        .fruit.falling {
-            animation: apple-fall 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
-
-        .newton {
-            position: absolute;
-            bottom: 5%;
-            right: 25%;
-            width: 60px;
-            height: 80px;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .newton.visible {
-            opacity: 1;
-        }
-
-        .newton-head {
-            width: 25px;
-            height: 25px;
-            background: #FDBCB4;
-            border-radius: 50%;
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .newton-body {
-            width: 20px;
-            height: 40px;
-            background: #4A4A4A;
-            position: absolute;
-            top: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 0 0 10px 10px;
-        }
-
-        .newton-legs {
-            width: 30px;
-            height: 15px;
-            background: #2A2A2A;
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 5px;
-        }
-
-        @keyframes gentle-sway {
-            0%, 100% { transform: rotate(-2deg); }
-            50% { transform: rotate(2deg); }
-        }
-
-        @keyframes apple-fall {
-            0% { 
-                transform: rotate(-2deg); 
-                bottom: 55%; 
-                left: 60%; 
-            }
-            100% { 
-                transform: rotate(180deg); 
-                bottom: 5%; 
-                left: 58%; 
-                opacity: 0;
-            }
-        }
-
-        .stage-label {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 15px;
-            padding: 8px 12px;
-            font-size: 12px;
-            opacity: 0;
-            transition: all 0.3s ease;
-            pointer-events: none;
-            backdrop-filter: blur(10px);
-            white-space: nowrap;
-        }
-
-        .tree-element:hover .stage-label {
-            opacity: 1;
-        }
-
-        .label-roots { bottom: -40px; left: 50%; transform: translateX(-50%); }
-        .label-trunk { right: -80px; top: 50%; transform: translateY(-50%); }
-        .label-branches { top: -40px; left: 50%; transform: translateX(-50%); }
-        .label-canopy { top: -40px; left: 50%; transform: translateX(-50%); }
-        .label-fruit { bottom: -40px; left: 50%; transform: translateX(-50%); }
-
-        .detail-panel {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: rgba(0, 0, 0, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 500px;
-            width: 90vw;
-            backdrop-filter: blur(20px);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            z-index: 1000;
-            text-align: center;
-        }
-
-        .detail-panel.active {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .detail-title {
-            font-size: 28px;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #ffffff, #cccccc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-        }
-
-        .detail-subtitle {
-            font-size: 16px;
-            color: #aaaaaa;
-            margin-bottom: 20px;
-        }
-
-        .detail-description {
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            color: #e0e0e0;
-        }
-
-        .detail-meta {
-            font-style: italic;
-            color: #888888;
-            font-size: 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 15px;
-            margin-top: 20px;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: #ffffff;
-            font-size: 24px;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
-
-        .close-btn:hover {
-            opacity: 1;
-        }
-
-        .title {
-            position: absolute;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 28px;
-            font-weight: 300;
-            letter-spacing: 2px;
-            opacity: 0.9;
-            font-family: 'Georgia', serif;
-        }
-
-        .subtitle {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
-            opacity: 0.7;
-            letter-spacing: 1px;
-        }
-
-        .apple-trigger {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(255, 107, 107, 0.8);
-            border: 1px solid #FF4444;
-            border-radius: 20px;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .apple-trigger:hover {
-            background: rgba(255, 107, 107, 1);
-            transform: scale(1.05);
-        }
-
-        @media (max-width: 768px) {
-            .title {
-                font-size: 20px;
-            }
-            .tree-container {
-                width: 95vmin;
-                height: 95vmin;
-            }
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Ukubona Pentad — Life Stages & Meta Alignment</title>
+<style>
+  :root{
+    --bg:#0b0d0f; --soil:#2c2b28; --root:#7b4b2a; --trunk:#6b523f;
+    --branch:#2f5f3b; --canopy:#51a06a; --haze:#7fcaa0; --fruit:#e55b58;
+    --seed:#f1c84e; --life:#5dd69b; --recur:#e56a6a; --text:#e7efe9; --dim:#a9b6ae;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    color:var(--text); background: radial-gradient(1200px 900px at 50% 0%, #0e1113, var(--bg));
+  }
+  .wrap{max-width:1200px;margin:0 auto;padding:20px}
+  .card{
+    background:#0a0c0e; border:1px solid #1f2326; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,.35);
+    overflow:hidden
+  }
+  header{padding:20px 20px 0 20px}
+  h1{font-size:22px; margin:0 0 4px}
+  .sub{color:var(--dim); font-size:14px; margin:0 0 12px}
+  .controls{display:flex; gap:10px; flex-wrap:wrap; padding:0 20px 10px}
+  .chip{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:12px;
+    border:1px solid #2a2f33; background:#0e1114; color:#cfd8d2; font-size:12px}
+  button.chip{cursor:pointer}
+  svg{display:block; width:100%; height:72vh; background:linear-gradient(#0a0c0e,#0d1012)}
+  .legend{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; padding:10px 20px 20px}
+  .legend .sw{display:inline-block;width:24px;height:3px;border-radius:2px;margin-right:8px;vertical-align:middle}
+  /* detail panel */
+  .sheet{
+    position: fixed; top:0; right:-440px; width:420px; max-width:90vw; height:100%;
+    background:#0b0d0f; border-left:1px solid #1f2326; box-shadow:-20px 0 60px rgba(0,0,0,.4);
+    transition:right .35s ease; padding:22px; z-index:30; overflow:auto;
+  }
+  .sheet.open{ right:0; }
+  .sheet h2{margin:0 0 6px; font-size:20px}
+  .sheet .subline{color:var(--dim); margin:0 0 14px; font-size:13px}
+  .sheet .body{line-height:1.6; font-size:14px; color:#ced7d1}
+  .close{position:absolute; top:10px; right:14px; background:none; border:1px solid #2a2f33; color:#cfd8d2;
+    border-radius:10px; padding:6px 10px; cursor:pointer}
+  .halo{pointer-events:none}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="title">Ukubona Tree</h1>
-        <p class="subtitle">Life Stages & Meta Alignment — Click each part to explore</p>
-        
-        <div class="tree-container">
-            <!-- Roots -->
-            <div class="tree-element roots" data-stage="roots">
-                <div class="stage-label label-roots">
-                    Roots / Ukuvula<br><small>Diet — Foundation</small>
-                </div>
-            </div>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <h1>Ukubona Pentad — Life Stages & Meta Alignment</h1>
+        <p class="sub">Younger → Older (right-hand arc). Click any stratum for details.</p>
+      </header>
 
-            <!-- Trunk -->
-            <div class="tree-element trunk" data-stage="trunk">
-                <div class="stage-label label-trunk">
-                    Trunk / Ukuzula<br><small>Fitness — Structure</small>
-                </div>
-            </div>
+      <div class="controls">
+        <span class="chip"><span class="sw" style="background:var(--life)"></span>Life arc</span>
+        <span class="chip"><span class="sw" style="background:var(--recur)"></span>Recursion (thin, dashed)</span>
+        <button class="chip" id="randomize">↻ Randomize branches</button>
+      </div>
 
-            <!-- Branches -->
-            <div class="tree-element branches" data-stage="branching">
-                <div class="branch branch-1"></div>
-                <div class="branch branch-2"></div>
-                <div class="branch branch-3"></div>
-                <div class="branch branch-4"></div>
-                <div class="branch branch-5"></div>
-                <div class="stage-label label-branches">
-                    Branches / Ukukona<br><small>Games — Exploration</small>
-                </div>
-            </div>
+      <!-- SVG SCENE -->
+      <svg id="scene" viewBox="0 0 1000 1200" role="img" aria-label="Ukubona Truth Tree">
+        <!-- soil bands -->
+        <rect x="0" y="1150" width="1000" height="16" fill="var(--soil)" opacity=".18"/>
+        <rect x="0" y="1132" width="1000" height="16" fill="var(--soil)" opacity=".14"/>
+        <rect x="0" y="1114" width="1000" height="16" fill="var(--soil)" opacity=".10"/>
 
-            <!-- Canopy -->
-            <div class="tree-element canopy" data-stage="canopy">
-                <div class="stage-label label-canopy">
-                    Canopy / Ukubona<br><small>Health — Integration</small>
-                </div>
-            </div>
+        <g id="tree"></g>
 
-            <!-- Fruit -->
-            <div class="tree-element fruit" data-stage="fruit">
-                <div class="stage-label label-fruit">
-                    Fruit / Ukukula<br><small>Aging — Legacy</small>
-                </div>
-            </div>
+        <!-- life arc (younger→older) -->
+        <defs>
+          <marker id="arrowTip" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--life)" />
+          </marker>
+          <marker id="arrowThin" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse">
+            <path d="M 0 0 L 8 4 L 0 8 z" fill="var(--recur)" />
+          </marker>
+        </defs>
+        <path id="lifeArc" d="M 880,1120 C 960,780 960,420 880,200" stroke="var(--life)" stroke-width="6" fill="none" marker-end="url(#arrowTip)" opacity=".95"/>
+        <text x="930" y="600" transform="rotate(-90 930 600)" text-anchor="middle" fill="#9fe8c6" font-size="20">Younger → Older</text>
 
-            <!-- Newton figure -->
-            <div class="newton" id="newton">
-                <div class="newton-head"></div>
-                <div class="newton-body"></div>
-                <div class="newton-legs"></div>
-            </div>
-        </div>
+        <!-- recursion loop (thin) -->
+        <path id="recurArc" d="M 120,200 C 40,420 40,780 120,1120"
+              stroke="var(--recur)" stroke-width="3" stroke-dasharray="10 10"
+              fill="none" marker-end="url(#arrowThin)" opacity=".9"/>
+        <text x="70" y="600" transform="rotate(90 70 600)" text-anchor="middle" fill="#f3a2a2" font-size="14">Recursion → next cycle</text>
+      </svg>
 
-        <div class="apple-trigger" onclick="dropApple()">🍎 Drop Apple</div>
-
-        <div class="detail-panel" id="detailPanel">
-            <button class="close-btn" onclick="closeDetail()">&times;</button>
-            <div id="detailContent"></div>
-        </div>
+      <div class="legend">
+        <div><span class="sw" style="background:var(--life)"></span>Younger → Older</div>
+        <div><span class="sw" style="background:var(--recur)"></span>Recursion (thin dashed)</div>
+        <div><span class="sw" style="background:var(--canopy)"></span>Canopy haze (integration)</div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const stageData = {
-            roots: {
-                title: "Roots / Ukuvula",
-                subtitle: "Diet — Foundation",
-                description: "Infancy & Early Childhood — Intake, sensory learning, nutrition. The unseen foundation that sustains all growth above.",
-                meta: "Meta: God's provisioning — the hidden source of all sustenance",
-                color: "#8B4513"
-            },
-            trunk: {
-                title: "Trunk / Ukuzula",
-                subtitle: "Fitness — Structure", 
-                description: "Childhood to Adolescence — Building capacity, stamina, coordination. The solid core that supports expansion.",
-                meta: "Meta: Man's embodiment — physical presence in the world",
-                color: "#A0522D"
-            },
-            branching: {
-                title: "Branches / Ukukona",
-                subtitle: "Games — Exploration",
-                description: "Young Adulthood — Cognitive & social exploration, testing/inventing rules. Reaching in multiple directions.",
-                meta: "Meta: Man's cognition & culture — the proliferation of possibilities",
-                color: "#228B22"
-            },
-            canopy: {
-                title: "Canopy / Ukubona",
-                subtitle: "Health — Integration",
-                description: "Mature Adulthood — Whole-system view, integrating life domains. The full flowering of consciousness.",
-                meta: "Meta: God's omniscience — seeing the forest and every leaf",
-                color: "#32CD32"
-            },
-            fruit: {
-                title: "Fruit / Ukukula",
-                subtitle: "Aging — Legacy",
-                description: "Elderhood — Harvest, legacy, recursion to next cycle. Seeds of wisdom falling to fertile ground.",
-                meta: "Meta: AI-like recursion — the eternal return with accumulated knowledge",
-                color: "#FFA500"
-            }
-        };
+  <!-- Detail Sheet -->
+  <aside id="sheet" class="sheet" aria-hidden="true">
+    <button class="close" id="closeSheet">Close</button>
+    <h2 id="sTitle">Layer</h2>
+    <p id="sSub" class="subline"></p>
+    <div id="sBody" class="body"></div>
+    <p id="sMeta" class="subline" style="margin-top:16px; font-style:italic"></p>
+  </aside>
 
-        function showDetail(stageName) {
-            const data = stageData[stageName];
-            const panel = document.getElementById('detailPanel');
-            const content = document.getElementById('detailContent');
-            
-            content.innerHTML = `
-                <div class="detail-title" style="color: ${data.color}">${data.title}</div>
-                <div class="detail-subtitle">${data.subtitle}</div>
-                <div class="detail-description">${data.description}</div>
-                <div class="detail-meta">${data.meta}</div>
-            `;
-            
-            // Remove active from all stages
-            document.querySelectorAll('.tree-element').forEach(s => s.classList.remove('active'));
-            
-            // Add active to clicked stage
-            document.querySelector(`[data-stage="${stageName}"]`).classList.add('active');
-            
-            panel.classList.add('active');
+<script>
+  // ---------- Data (edit these texts/colors freely) ----------
+  const PENTAD = [
+    { key:"roots",    title:"Roots / Ukuvula",    subtitle:"Diet — Foundation",
+      meta:"God's provisioning — energy & matter from earth/sun",
+      y: 1120, color:getVar("--root"),
+      body:"Infancy & Early Childhood — Intake, sensory learning, nutrition. All later growth is contingent on richness and balance here." },
+
+    { key:"trunk",    title:"Trunk / Ukuzula",    subtitle:"Fitness — Structure",
+      meta:"Man's embodiment — capacity, stamina, coordination",
+      y: 930, color:getVar("--trunk"),
+      body:"Childhood → Adolescence — Building strength, stability, and motor intelligence. Movement is the conduit between environment and self." },
+
+    { key:"branch",   title:"Branching / Ukukona", subtitle:"Games — Exploration",
+      meta:"Man's cognition & culture — agency & strategy",
+      y: 760, color:getVar("--branch"),
+      body:"Young Adulthood — Cognitive/social exploration; testing rules and inventing new ones. Divergence and emergent strategy take root." },
+
+    { key:"canopy",   title:"Canopy / Ukubona",   subtitle:"Health — Integration",
+      meta:"God's omniscience — whole-system perception",
+      y: 570, color:getVar("--canopy"),
+      body:"Mature Adulthood — Integrating domains into a coherent worldview of wellbeing. Decisions with context and longer horizons." },
+
+    { key:"fruit",    title:"Fruit / Ukukula",    subtitle:"Aging — Legacy",
+      meta:"AI-like recursion — harvest → seeds → next cycle",
+      y: 380, color:getVar("--fruit"),
+      body:"Elderhood — Harvest and recursion. Knowledge transfer, mentoring, and seeding the next generation with embodied wisdom." },
+  ];
+
+  // ---------- SVG helpers ----------
+  const svgNS = "http://www.w3.org/2000/svg";
+  const tree = document.getElementById("tree");
+  const sheet = document.getElementById("sheet");
+  const sTitle = document.getElementById("sTitle");
+  const sSub   = document.getElementById("sSub");
+  const sBody  = document.getElementById("sBody");
+  const sMeta  = document.getElementById("sMeta");
+  document.getElementById("closeSheet").onclick = () => sheet.classList.remove("open");
+
+  function getVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function cbez(p0,p1,p2,p3){ return `M ${p0[0]},${p0[1]} C ${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${p3[0]},${p3[1]}`; }
+  function r(seed){ seed = (seed*16807)%2147483647; return () => (seed = (seed*16807)%2147483647)/2147483647; }
+
+  function draw(seed=42){
+    tree.innerHTML = ""; // clear
+    const rand = r(seed);
+    const W=1000, cx=W/2;
+
+    // Trunk (layered Beziers for thickness)
+    for(let j=0;j<5;j++){
+      const jitter = (rand()-0.5)*10;
+      const p0=[cx+jitter,1120-8];
+      const p3=[cx+jitter,550];
+      const p1=[cx-90+(rand()-0.5)*18,950];
+      const p2=[cx+90+(rand()-0.5)*18,720];
+      path(cbez(p0,p1,p2,p3), {stroke:getVar("--trunk"), "stroke-width":18-j*2.5, opacity:.55+j*.08});
+    }
+
+    // Roots (mirrored)
+    for(let k=0;k<7;k++){
+      const amp=240+k*28, base=1120-10;
+      const p0=[cx,base];
+      const p3L=[cx-(420-k*60), base+85+k*10];
+      const p1L=[cx-(120+k*18), base+10+k*2];
+      const p2L=[cx-amp, base+60+k*6];
+      const p3R=[cx+(420-k*60), base+85+k*10];
+      const p1R=[cx+(120+k*18), base+10+k*2];
+      const p2R=[cx+amp, base+60+k*6];
+      path(cbez(p0,p1L,p2L,p3L), {stroke:getVar("--root"), "stroke-width":6, opacity:.66});
+      path(cbez(p0,p1R,p2R,p3R), {stroke:getVar("--root"), "stroke-width":6, opacity:.66});
+    }
+
+    // Branches (with small recursive offshoots + canopy haze)
+    const levels=[800,720,650];
+    levels.forEach((ly,i)=>{
+      [-1,1].forEach(dir=>{
+        const span=340-i*70;
+        const p0=[cx,ly];
+        const p3=[cx+dir*(span + (rand()*40)), ly-(40+i*25)];
+        const p1=[cx+dir*(120+rand()*40), ly-10];
+        const p2=[cx+dir*(240+rand()*40), ly-(25+i*20)];
+        path(cbez(p0,p1,p2,p3), {stroke:getVar("--branch"), "stroke-width":10-i*2.5, opacity:.9});
+        for(let r=0;r<2;r++){
+          const ox0=cx+dir*(180+r*40+rand()*20);
+          const oy0=ly-(10+r*10);
+          const ox3=cx+dir*(span*.78+rand()*30);
+          const oy3=ly-(0+r*18);
+          const ox1=ox0+dir*(40+rand()*10);
+          const oy1=oy0+8;
+          const ox2=ox3-dir*(40+rand()*10);
+          const oy2=oy3-6;
+          path(cbez([ox0,oy0],[ox1,oy1],[ox2,oy2],[ox3,oy3]), {stroke:getVar("--branch"), "stroke-width":5-r, opacity:.55});
+          // a little leaf haze
+          circle(ox3,oy3, 12+rand()*10, {fill:getVar("--canopy"), opacity:.08+rand()*.06});
         }
+      });
+    });
 
-        function closeDetail() {
-            document.getElementById('detailPanel').classList.remove('active');
-            document.querySelectorAll('.tree-element').forEach(s => s.classList.remove('active'));
-        }
+    // Canopy haze field
+    for(let i=0;i<160;i++){
+      const x=180+rand()*(W-360);
+      const y=470+rand()*160;
+      const r=12+rand()*28;
+      circle(x,y,r,{fill:getVar("--haze"), opacity:.04+rand()*.06});
+    }
 
-        function dropApple() {
-            const fruit = document.querySelector('.fruit');
-            const newton = document.getElementById('newton');
-            
-            // Show Newton
-            newton.classList.add('visible');
-            
-            // Start apple fall
-            fruit.classList.add('falling');
-            
-            // Reset after animation
-            setTimeout(() => {
-                fruit.classList.remove('falling');
-                newton.classList.remove('visible');
-            }, 2500);
-        }
+    // Fruit + seeds
+    for(let i=0;i<8;i++){
+      const x=180+i*((W-360)/7);
+      const y=320 + Math.sin(i*.8)*10;
+      circle(x,y,14,{fill:getVar("--fruit")});
+      circle(x,y+26,9.5,{fill:getVar("--seed"), opacity:.9});
+    }
 
-        // Add click listeners
-        document.querySelectorAll('.tree-element').forEach(element => {
-            element.addEventListener('click', (e) => {
-                const stage = element.getAttribute('data-stage');
-                if (stage) {
-                    showDetail(stage);
-                }
-            });
-        });
+    // Hotspots + labels
+    PENTAD.forEach((layer, idx)=>{
+      // halo
+      circle(cx,layer.y,54,{fill:"#ffffff", opacity:.02, class:"halo"});
+      // ring
+      circle(cx,layer.y,38,{fill:"none", stroke:layer.color, "stroke-width":10, opacity:.9});
+      // labels
+      text(cx, layer.y-72, layer.title, {fill:getVar("--text"), "font-size":22, anchor:"middle"});
+      text(cx, layer.y-48, layer.subtitle, {fill:getVar("--dim"), "font-size":14, anchor:"middle"});
+      // interaction
+      const hit=circle(cx,layer.y,60,{fill:"#000", opacity:0, cursor:"pointer"});
+      hit.addEventListener("click", ()=>{
+        openSheet(layer);
+      });
+    });
+  }
 
-        // Close on background click
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('container')) {
-                closeDetail();
-            }
-        });
+  function openSheet(layer){
+    sTitle.textContent = layer.title;
+    sSub.textContent   = layer.subtitle;
+    sBody.textContent  = layer.body;
+    sMeta.textContent  = "Meta: " + layer.meta;
+    sheet.classList.add("open");
+    sheet.setAttribute("aria-hidden","false");
+  }
 
-        // Escape key to close
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeDetail();
-            }
-        });
+  // SVG element creators
+  function path(d, attrs){
+    const el=document.createElementNS(svgNS,"path");
+    el.setAttribute("d", d);
+    el.setAttribute("fill","none");
+    for(const k in attrs){ el.setAttribute(k, attrs[k]); }
+    tree.appendChild(el);
+    return el;
+  }
+  function circle(cx,cy,r,attrs){
+    const el=document.createElementNS(svgNS,"circle");
+    el.setAttribute("cx",cx); el.setAttribute("cy",cy); el.setAttribute("r",r);
+    for(const k in attrs){ el.setAttribute(k, attrs[k]); }
+    tree.appendChild(el); return el;
+  }
+  function text(x,y,str,attrs){
+    const el=document.createElementNS(svgNS,"text");
+    el.setAttribute("x",x); el.setAttribute("y",y);
+    el.setAttribute("text-anchor", attrs.anchor||"start");
+    delete attrs.anchor;
+    for(const k in attrs){ el.setAttribute(k, attrs[k]); }
+    el.textContent = str; tree.appendChild(el); return el;
+  }
 
-        // Animate elements on load
-        window.addEventListener('load', () => {
-            const elements = document.querySelectorAll('.tree-element');
-            elements.forEach((element, index) => {
-                element.style.opacity = '0';
-                element.style.transform += ' translateY(20px)';
-                
-                setTimeout(() => {
-                    element.style.transition = 'all 0.8s ease';
-                    element.style.opacity = '1';
-                    element.style.transform = element.style.transform.replace('translateY(20px)', '');
-                }, index * 300);
-            });
-        });
-    </script>
+  draw(42);
+  document.getElementById("randomize").onclick = () => draw(Math.floor(Math.random()*1e6));
+</script>
 </body>
 </html>
+
