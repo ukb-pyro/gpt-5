@@ -1,4 +1,54 @@
-<!DOCTYPE html>
+.roots::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(139, 69, 19, 0.3) 0px,
+                rgba(139, 69, 19, 0.3) 2px,
+                transparent 2px,
+                transparent 8px
+            );
+            border-radius: inherit;
+        }
+
+        .trunk::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent 0px,
+                transparent 8px,
+                rgba(0,0,0,0.2) 8px,
+                rgba(0,0,0,0.2) 10px
+            );
+            border-radius: inherit;
+        }
+
+        .canopy::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 15%;
+            width: 25%;
+            height: 25%;
+            background: radial-gradient(circle, rgba(50, 205, 50, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .canopy::after {
+            content: '';
+            position: absolute;
+            top: 40%;
+            right: 20%;
+            width: 20%;
+            height: 20%;
+            background: radial-gradient(circle, rgba(50, 205, 50, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
+        }<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -49,38 +99,23 @@
             filter: brightness(1.5) drop-shadow(0 0 30px rgba(255,255,255,0.5));
         }
 
-        /* Roots - Underground network */
+        /* Roots - At the very BOTTOM (infancy) */
         .roots {
-            bottom: 0;
-            left: 30%;
-            width: 40%;
-            height: 15%;
+            bottom: 0%;
+            left: 35%;
+            width: 30%;
+            height: 10%;
             background: radial-gradient(ellipse at center, rgba(139, 69, 19, 0.8) 0%, rgba(101, 67, 33, 0.6) 50%, transparent 100%);
             border-radius: 50%;
-            transform: scaleY(0.5);
+            transform: scaleY(0.6);
         }
 
-        .roots::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                45deg,
-                rgba(139, 69, 19, 0.3) 0px,
-                rgba(139, 69, 19, 0.3) 2px,
-                transparent 2px,
-                transparent 8px
-            );
-            border-radius: inherit;
-        }
-
-        /* Trunk - Solid cylindrical form */
+        /* Trunk - ABOVE roots, BELOW branches (childhood) */
         .trunk {
-            bottom: 12%;
+            bottom: 8%;
             left: 47%;
             width: 6%;
-            height: 25%;
+            height: 35%;
             background: linear-gradient(to right, 
                 #5D4037 0%, 
                 #6D4C41 20%, 
@@ -91,73 +126,67 @@
             position: relative;
         }
 
-        .trunk::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent 0px,
-                transparent 8px,
-                rgba(0,0,0,0.2) 8px,
-                rgba(0,0,0,0.2) 10px
-            );
-            border-radius: inherit;
-        }
-
-        /* Branches - Fractal extensions */
+        /* Branches - ABOVE trunk, BELOW canopy (young adult) */
         .branches {
-            bottom: 35%;
-            left: 20%;
-            width: 60%;
-            height: 30%;
+            bottom: 40%;
+            left: 15%;
+            width: 70%;
+            height: 15%;
+            z-index: 2;
         }
 
         .branch {
             position: absolute;
-            background: linear-gradient(45deg, #4A5D23, #5D7527);
-            transform-origin: bottom left;
+            background: linear-gradient(to right, #4A5D23, #5D7527);
+            border-radius: 2px;
         }
 
         .branch-1 {
-            width: 3px;
-            height: 80px;
-            bottom: 10%;
-            left: 45%;
-            transform: rotate(25deg);
+            width: 100px;
+            height: 4px;
+            top: 70%;
+            left: 35%;
+            transform: rotate(10deg);
         }
 
         .branch-2 {
-            width: 2px;
-            height: 60px;
-            bottom: 15%;
+            width: 80px;
+            height: 3px;
+            top: 40%;
             left: 55%;
-            transform: rotate(-35deg);
+            transform: rotate(-20deg);
         }
 
         .branch-3 {
-            width: 2px;
-            height: 50px;
-            bottom: 25%;
-            left: 35%;
-            transform: rotate(45deg);
+            width: 90px;
+            height: 3px;
+            top: 10%;
+            left: 20%;
+            transform: rotate(25deg);
         }
 
         .branch-4 {
-            width: 2px;
-            height: 45px;
-            bottom: 30%;
+            width: 70px;
+            height: 2px;
+            top: 80%;
             left: 65%;
-            transform: rotate(-50deg);
+            transform: rotate(-35deg);
         }
 
-        /* Canopy - Organic cloud form */
+        .branch-5 {
+            width: 85px;
+            height: 3px;
+            top: 55%;
+            left: 25%;
+            transform: rotate(-5deg);
+        }
+
+        /* Canopy - ABOVE branches (mature adult) */
         .canopy {
             top: 20%;
             left: 25%;
             width: 50%;
-            height: 35%;
+            height: 25%;
             background: radial-gradient(ellipse at center, 
                 rgba(34, 139, 34, 0.9) 0%, 
                 rgba(50, 205, 50, 0.7) 30%, 
@@ -167,38 +196,17 @@
             position: relative;
         }
 
-        .canopy::before {
-            content: '';
-            position: absolute;
-            top: 20%;
-            left: 15%;
-            width: 25%;
-            height: 25%;
-            background: radial-gradient(circle, rgba(50, 205, 50, 0.6) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
-        .canopy::after {
-            content: '';
-            position: absolute;
-            top: 40%;
-            right: 20%;
-            width: 20%;
-            height: 20%;
-            background: radial-gradient(circle, rgba(50, 205, 50, 0.6) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
-        /* Fruit - Apple that can fall */
+        /* Fruit - INSIDE/hanging from canopy (elder) */
         .fruit {
-            top: 45%;
-            right: 35%;
-            width: 40px;
-            height: 40px;
+            top: 35%;
+            left: 60%;
+            width: 30px;
+            height: 30px;
             background: radial-gradient(ellipse at 30% 30%, #FF6B6B, #FF4444, #CC0000);
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            position: relative;
+            position: absolute;
             animation: gentle-sway 3s ease-in-out infinite;
+            z-index: 4;
         }
 
         .fruit::before {
@@ -284,13 +292,13 @@
         @keyframes apple-fall {
             0% { 
                 transform: rotate(-2deg); 
-                top: 45%; 
-                right: 35%; 
+                top: 35%; 
+                left: 60%; 
             }
             100% { 
                 transform: rotate(180deg); 
-                top: 70%; 
-                right: 32%; 
+                top: 85%; 
+                left: 58%; 
                 opacity: 0;
             }
         }
@@ -467,6 +475,7 @@
                 <div class="branch branch-2"></div>
                 <div class="branch branch-3"></div>
                 <div class="branch branch-4"></div>
+                <div class="branch branch-5"></div>
                 <div class="stage-label label-branches">
                     Branches / Ukukona<br><small>Games — Exploration</small>
                 </div>
