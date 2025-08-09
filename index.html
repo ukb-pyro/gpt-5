@@ -1,4 +1,48 @@
-.roots::before {
+.branch {
+            position: absolute;
+            background: linear-gradient(to right, #4A5D23, #5D7527);
+            border-radius: 2px;
+        }
+
+        .branch-1 {
+            width: 100px;
+            height: 4px;
+            top: 70%;
+            left: 35%;
+            transform: rotate(10deg);
+        }
+
+        .branch-2 {
+            width: 80px;
+            height: 3px;
+            top: 40%;
+            left: 55%;
+            transform: rotate(-20deg);
+        }
+
+        .branch-3 {
+            width: 90px;
+            height: 3px;
+            top: 10%;
+            left: 20%;
+            transform: rotate(25deg);
+        }
+
+        .branch-4 {
+            width: 70px;
+            height: 2px;
+            top: 80%;
+            left: 65%;
+            transform: rotate(-35deg);
+        }
+
+        .branch-5 {
+            width: 85px;
+            height: 3px;
+            top: 55%;
+            left: 25%;
+            transform: rotate(-5deg);
+        }        .roots::before {
             content: '';
             position: absolute;
             width: 100%;
@@ -110,12 +154,12 @@
             transform: scaleY(0.6);
         }
 
-        /* Trunk - ABOVE roots, BELOW branches (childhood) */
+        /* Trunk - Starting FROM the roots, going UP */
         .trunk {
-            bottom: 8%;
+            bottom: 10%;
             left: 47%;
             width: 6%;
-            height: 35%;
+            height: 25%;
             background: linear-gradient(to right, 
                 #5D4037 0%, 
                 #6D4C41 20%, 
@@ -126,64 +170,18 @@
             position: relative;
         }
 
-        /* Branches - ABOVE trunk, BELOW canopy (young adult) */
+        /* Branches - Starting WHERE trunk ends */
         .branches {
-            bottom: 40%;
+            bottom: 35%;
             left: 15%;
             width: 70%;
             height: 15%;
             z-index: 2;
         }
 
-        .branch {
-            position: absolute;
-            background: linear-gradient(to right, #4A5D23, #5D7527);
-            border-radius: 2px;
-        }
-
-        .branch-1 {
-            width: 100px;
-            height: 4px;
-            top: 70%;
-            left: 35%;
-            transform: rotate(10deg);
-        }
-
-        .branch-2 {
-            width: 80px;
-            height: 3px;
-            top: 40%;
-            left: 55%;
-            transform: rotate(-20deg);
-        }
-
-        .branch-3 {
-            width: 90px;
-            height: 3px;
-            top: 10%;
-            left: 20%;
-            transform: rotate(25deg);
-        }
-
-        .branch-4 {
-            width: 70px;
-            height: 2px;
-            top: 80%;
-            left: 65%;
-            transform: rotate(-35deg);
-        }
-
-        .branch-5 {
-            width: 85px;
-            height: 3px;
-            top: 55%;
-            left: 25%;
-            transform: rotate(-5deg);
-        }
-
-        /* Canopy - ABOVE branches (mature adult) */
+        /* Canopy - At the very TOP */
         .canopy {
-            top: 20%;
+            bottom: 50%;
             left: 25%;
             width: 50%;
             height: 25%;
@@ -196,9 +194,9 @@
             position: relative;
         }
 
-        /* Fruit - INSIDE/hanging from canopy (elder) */
+        /* Fruit - INSIDE the canopy at the top */
         .fruit {
-            top: 35%;
+            bottom: 55%;
             left: 60%;
             width: 30px;
             height: 30px;
@@ -292,12 +290,12 @@
         @keyframes apple-fall {
             0% { 
                 transform: rotate(-2deg); 
-                top: 35%; 
+                bottom: 55%; 
                 left: 60%; 
             }
             100% { 
                 transform: rotate(180deg); 
-                top: 85%; 
+                bottom: 5%; 
                 left: 58%; 
                 opacity: 0;
             }
