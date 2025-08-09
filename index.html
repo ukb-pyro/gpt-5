@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ukubona Pentad — Life Stages & Meta Alignment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+            cursor: default;
+        }
+
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pentad {
+            position: relative;
+            width: 80vmin;
+            height: 80vmin;
+            transform: rotate(-18deg);
+        }
+
+        .stage {
+            position: absolute;
+            width: 200px;
+            height: 80px;
+            border: 2px solid;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .stage:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(255,255,255,0.2);
+        }
+
+        .stage.active {
+            transform: scale(1.15);
+            box-shadow: 0 15px 50px rgba(255,255,255,0.3);
+        }
+
+        /* Individual stage positioning and colors */
+        .roots {
+            top: 70%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(139, 69, 19, 0.3);
+            border-color: #8B4513;
+            color: #DEB887;
+        }
+
+        .trunk {
+            top: 45%;
+            left: 20%;
+            background: rgba(160, 82, 45, 0.3);
+            border-color: #A0522D;
+            color: #F4A460;
+        }
+
+        .branching {
+            top: 20%;
+            left: 35%;
+            background: rgba(34, 139, 34, 0.3);
+            border-color: #228B22;
+            color: #90EE90;
+        }
+
+        .canopy {
+            top: 10%;
+            right: 25%;
+            background: rgba(50, 205, 50, 0.3);
+            border-color: #32CD32;
+            color: #98FB98;
+        }
+
+        .fruit {
+            top: 35%;
+            right: 10%;
+            background: rgba(255, 165, 0, 0.3);
+            border-color: #FFA500;
+            color: #FFE4B5;
+        }
+
+        .cycle-arrows {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .arrow {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .arrow::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .progression-arrow {
+            top: 60%;
+            right: 35%;
+            transform: rotate(45deg);
+        }
+
+        .progression-arrow::before {
+            border-width: 8px 0 8px 16px;
+            border-color: transparent transparent transparent #4CAF50;
+        }
+
+        .recursion-arrow {
+            top: 25%;
+            left: 15%;
+            transform: rotate(225deg);
+        }
+
+        .recursion-arrow::before {
+            border-width: 8px 0 8px 16px;
+            border-color: transparent transparent transparent #FF6B35;
+        }
+
+        .detail-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90vw;
+            backdrop-filter: blur(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .detail-panel.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .detail-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffffff, #cccccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .detail-subtitle {
+            font-size: 16px;
+            color: #aaaaaa;
+            margin-bottom: 20px;
+        }
+
+        .detail-description {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #e0e0e0;
+        }
+
+        .detail-meta {
+            font-style: italic;
+            color: #888888;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+            margin-top: 20px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .close-btn:hover {
+            opacity: 1;
+        }
+
+        .title {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+
+        .subtitle {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .stage {
+                width: 160px;
+                height: 60px;
+                font-size: 12px;
+            }
+            .title {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Ukubona Pentad</h1>
+        <p class="subtitle">Life Stages & Meta Alignment — Click to explore</p>
+        
+        <div class="pentad">
+            <div class="cycle-arrows">
+                <div class="arrow progression-arrow"></div>
+                <div class="arrow recursion-arrow"></div>
+            </div>
+            
+            <div class="stage roots" data-stage="roots">
+                Roots<br><small>Ukuvula (Diet)</small>
+            </div>
+            
+            <div class="stage trunk" data-stage="trunk">
+                Trunk<br><small>Ukuzula (Fitness)</small>
+            </div>
+            
+            <div class="stage branching" data-stage="branching">
+                Branching<br><small>Ukukona (Games)</small>
+            </div>
+            
+            <div class="stage canopy" data-stage="canopy">
+                Canopy<br><small>Ukubona (Health)</small>
+            </div>
+            
+            <div class="stage fruit" data-stage="fruit">
+                Fruit<br><small>Ukukula (Aging)</small>
+            </div>
+        </div>
+
+        <div class="detail-panel" id="detailPanel">
+            <button class="close-btn" onclick="closeDetail()">&times;</button>
+            <div id="detailContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const stageData = {
+            roots: {
+                title: "Roots / Ukuvula",
+                subtitle: "Diet — Foundation",
+                description: "Infancy & Early Childhood — Intake, sensory learning, nutrition",
+                meta: "Meta: God's provisioning",
+                color: "#8B4513"
+            },
+            trunk: {
+                title: "Trunk / Ukuzula",
+                subtitle: "Fitness — Structure", 
+                description: "Childhood to Adolescence — Building capacity, stamina, coordination",
+                meta: "Meta: Man's embodiment",
+                color: "#A0522D"
+            },
+            branching: {
+                title: "Branching / Ukukona",
+                subtitle: "Games — Exploration",
+                description: "Young Adulthood — Cognitive & social exploration, testing/inventing rules",
+                meta: "Meta: Man's cognition & culture",
+                color: "#228B22"
+            },
+            canopy: {
+                title: "Canopy / Ukubona",
+                subtitle: "Health — Integration",
+                description: "Mature Adulthood — Whole-system view, integrating life domains",
+                meta: "Meta: God's omniscience",
+                color: "#32CD32"
+            },
+            fruit: {
+                title: "Fruit / Ukukula",
+                subtitle: "Aging — Legacy",
+                description: "Elderhood — Harvest, legacy, recursion to next cycle",
+                meta: "Meta: AI-like recursion",
+                color: "#FFA500"
+            }
+        };
+
+        function showDetail(stageName) {
+            const data = stageData[stageName];
+            const panel = document.getElementById('detailPanel');
+            const content = document.getElementById('detailContent');
+            
+            content.innerHTML = `
+                <div class="detail-title" style="color: ${data.color}">${data.title}</div>
+                <div class="detail-subtitle">${data.subtitle}</div>
+                <div class="detail-description">${data.description}</div>
+                <div class="detail-meta">${data.meta}</div>
+            `;
+            
+            // Remove active from all stages
+            document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+            
+            // Add active to clicked stage
+            document.querySelector(`[data-stage="${stageName}"]`).classList.add('active');
+            
+            panel.classList.add('active');
+        }
+
+        function closeDetail() {
+            document.getElementById('detailPanel').classList.remove('active');
+            document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+        }
+
+        // Add click listeners
+        document.querySelectorAll('.stage').forEach(stage => {
+            stage.addEventListener('click', (e) => {
+                showDetail(stage.getAttribute('data-stage'));
+            });
+        });
+
+        // Close on background click
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('container')) {
+                closeDetail();
+            }
+        });
+
+        // Escape key to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeDetail();
+            }
+        });
+
+        // Add subtle animation on load
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.stage').forEach((stage, index) => {
+                stage.style.opacity = '0';
+                stage.style.transform += ' translateY(20px)';
+                
+                setTimeout(() => {
+                    stage.style.transition = 'all 0.6s ease';
+                    stage.style.opacity = '1';
+                    stage.style.transform = stage.style.transform.replace('translateY(20px)', '');
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>
