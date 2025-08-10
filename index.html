@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Ukubona Pentad — Triple Mode Map (with Companies)</title>
+<title>Ukubona Pentad — Five Mode Map (with NAMES)</title>
 <style>
   :root{
     --bg:#0b0d0f; --soil:#2c2b28; --root:#7b4b2a; --trunk:#6b523f;
@@ -54,8 +54,8 @@
   <div class="wrap">
     <div class="card">
       <header>
-        <h1>Ukubona Pentad — Triple Mode Map</h1>
-        <p class="sub" id="subtitle">Mode: <strong>Life Stages</strong> — fractal role of <strong>Ukubona LLC</strong> (the nervous system) within a five-company stack for North America → Global. Press <span class="kbd">M</span> to switch modes.</p>
+        <h1>Ukubona Pentad — Five Mode Map</h1>
+        <p class="sub" id="subtitle">Mode: <strong>Life Stages</strong> — fractal role of <strong>Ukubona LLC</strong> within a five-company stack. Press <span class="kbd">M</span> to switch modes.</p>
       </header>
 
       <div class="controls">
@@ -97,7 +97,7 @@
         <div><span class="sw" style="background:var(--life)"></span>Younger → Older</div>
         <div><span class="sw" style="background:var(--recur)"></span>Recursion (thin dashed)</div>
         <div><span class="sw" style="background:var(--canopy)"></span>Canopy haze (integration)</div>
-        <div><span class="sw" style="background:var(--accent)"></span>Pentad Companies mode</div>
+        <div><span class="sw" style="background:var(--accent)"></span>Pentad Companies / NAMES mode</div>
       </div>
     </div>
     <p class="hint">Tip: click any ring to open details. Press <span class="kbd">R</span> to randomize branches, <span class="kbd">M</span> to toggle modes.</p>
@@ -227,6 +227,34 @@
       body:`Aging pipeline — combining Fried’s frailty phenotype (75+) with lifelong wearable-derived vitality metrics; supports decisions around ADLs, dignity thresholds (<0), and family network impacts.` },
   ];
 
+  // NAMES (Nature, Animal, Man, Enterprise, Systems)
+  const NAMES = [
+    { key:"roots",  title:"Nature (Roots)", subtitle:"Substrate — energy & matter",
+      meta:"Ecology, resources, constraints",
+      y:1120, color:getVar("--root"),
+      body:`Earth-first: thermodynamics, cycles, limits. The meaning of the earth as the ground of value.` },
+
+    { key:"trunk",  title:"Animal (Trunk)", subtitle:"Embodiment — instinct & movement",
+      meta:"Sensing, locomotion, survival",
+      y:930, color:getVar("--trunk"),
+      body:`Perception-action loops, bounded rationality, fitness as lived computation.` },
+
+    { key:"branch", title:"Man (Branching)", subtitle:"Agency — culture & tools",
+      meta:"Language, coordination, institutions",
+      y:760, color:getVar("--branch"),
+      body:`Symbolic reason, norms, markets, science — divergent exploration and design.` },
+
+    { key:"canopy", title:"Enterprise (Canopy)", subtitle:"Organization — projects & tech",
+      meta:"Firms, platforms, governance",
+      y:570, color:getVar("--canopy"),
+      body:`Coordinated effort that scales intent into capability; bridges ideas into durable systems.` },
+
+    { key:"fruit",  title:"Systems (Fruit)", subtitle:"Orchestration — recursion & emergence",
+      meta:"Interdependence, feedback, resilience",
+      y:380, color:getVar("--fruit"),
+      body:`Designing environments that design successors. Energy, security, sustainability as subsystems; self-improving loops.` },
+  ];
+
   // ---------- SVG helpers ----------
   const svgNS = "http://www.w3.org/2000/svg";
   const tree = document.getElementById("tree");
@@ -242,10 +270,10 @@
   function cbez(p0,p1,p2,p3){ return `M ${p0[0]},${p0[1]} C ${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${p3[0]},${p3[1]}`; }
   function r(seed){ seed = (seed*16807)%2147483647; return () => (seed = (seed*16807)%2147483647)/2147483647; }
 
-  let MODE = 0; // 0=Life, 1=Realms, 2=Plant→AI, 3=Pentad Companies
-  const MODE_NAMES = ["Life Stages", "Emergent Realms", "Plant → AI", "Pentad Companies"];
+  let MODE = 0; // 0=Life, 1=Realms, 2=Plant→AI, 3=Pentad Companies, 4=NAMES
+  const MODE_NAMES = ["Life Stages", "Emergent Realms", "Plant → AI", "Pentad Companies", "NAMES Pentad"];
 
-  function active(){ return [LIFE, REALMS, PLANT_AI, PENTAD][MODE]; }
+  function active(){ return [LIFE, REALMS, PLANT_AI, PENTAD, NAMES][MODE]; }
 
   function draw(seed=42){
     tree.innerHTML = ""; // clear
@@ -323,8 +351,8 @@
     active().forEach((layer)=>{
       // halo
       circle(cxLabel,layer.y,54,{fill:"#ffffff", opacity:.02, class:"halo"});
-      // ring (accent ring for Pentad mode)
-      const strokeCol = (MODE===3? getVar("--accent") : layer.color);
+      // ring (accent ring for Pentad & NAMES modes)
+      const strokeCol = ((MODE===3 || MODE===4) ? getVar("--accent") : layer.color);
       circle(cxLabel,layer.y,38,{fill:"none", stroke:strokeCol, "stroke-width":10, opacity:.9});
       // labels
       text(cxLabel, layer.y-72, layer.title, {fill:getVar("--text"), "font-size":22, anchor:"middle"});
@@ -339,6 +367,13 @@
       cornerBadges([
         "Wearables (All ages): steps, HRV, sleep, cadence",
         "Frailty (75+): weight loss, grip, exhaustion, slowness, low activity"
+      ]);
+    }
+
+    if(MODE===4){
+      cornerBadges([
+        "S = Systems: orchestration & emergence",
+        "Energy/Security/Sustainability as subsystems",
       ]);
     }
   }
@@ -365,7 +400,7 @@
     sTitle.textContent = layer.title;
     sSub.textContent   = layer.subtitle;
     sBody.textContent  = layer.body;
-    sMeta.textContent  = "Meta: " + layer.meta + (MODE===3? " — Stack: 5 companies (Ukubona = nervous system). Region: North America → Global." : "");
+    sMeta.textContent  = "Meta: " + layer.meta + ((MODE===3||MODE===4) ? " — Stack: 5 companies (Ukubona = nervous system). Region: North America → Global." : "");
     sheet.classList.add("open");
     sheet.setAttribute("aria-hidden","false");
   }
@@ -405,15 +440,14 @@
   // init
   draw(42);
   document.getElementById("randomize").onclick = () => draw(Math.floor(Math.random()*1e6));
-  document.getElementById("mode").onclick = () => setMode((MODE + 1) % 4);
+  document.getElementById("mode").onclick = () => setMode((MODE + 1) % 5);
 
   // keyboard shortcuts
   window.addEventListener("keydown", (e)=>{
     if(e.key.toLowerCase()==='r') draw(Math.floor(Math.random()*1e6));
-    if(e.key.toLowerCase()==='m') setMode((MODE + 1) % 4);
+    if(e.key.toLowerCase()==='m') setMode((MODE + 1) % 5);
     if(e.key==='Escape') sheet.classList.remove('open');
   });
 </script>
 </body>
 </html>
-
