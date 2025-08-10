@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Ukubona Pentad — Emergence & Recursion Map</title>
+<title>Ukubona Pentad — Triple Mode Map</title>
 <style>
   :root{
     --bg:#0b0d0f; --soil:#2c2b28; --root:#7b4b2a; --trunk:#6b523f;
@@ -53,14 +53,14 @@
   <div class="wrap">
     <div class="card">
       <header>
-        <h1>Ukubona Pentad — Emergence & Recursion Map</h1>
-        <p class="sub" id="subtitle">Mode: <strong>Life Stages</strong> (right-hand arc is Younger → Older). Switch to <em>Emergent Realms</em> to see Physics → Computational mapping.</p>
+        <h1>Ukubona Pentad — Triple Mode Map</h1>
+        <p class="sub" id="subtitle">Mode: <strong>Life Stages</strong> (right-hand arc is Younger → Older). Press <span class="kbd">M</span> to switch modes.</p>
       </header>
 
       <div class="controls">
         <span class="chip"><span class="sw" style="background:var(--life)"></span>Life arc</span>
         <span class="chip"><span class="sw" style="background:var(--recur)"></span>Recursion (thin, dashed)</span>
-        <button class="chip" id="mode">⇄ Switch to Realms</button>
+        <button class="chip" id="mode">⇄ Switch Mode</button>
         <button class="chip" id="randomize">↻ Randomize branches</button>
       </div>
 
@@ -112,7 +112,7 @@
 
 <script>
   // ---------- Data ----------
-  // LIFE STAGES (your original mapping, lightly edited)
+  // LIFE STAGES
   const LIFE = [
     { key:"roots",  title:"Roots / Ukuvula",  subtitle:"Diet — Foundation",
       meta:"Provisioning — energy & matter from earth & sun",
@@ -140,7 +140,7 @@
       body:`Elderhood — Harvest and recursion. Knowledge transfer, mentoring, and seeding the next generation with embodied wisdom.` },
   ];
 
-  // EMERGENT REALMS (first principles in five realms)
+  // EMERGENT REALMS
   const REALMS = [
     { key:"roots",  title:"Physics (Roots)",  subtitle:"Ontology — constraints",
       meta:"Conservation, symmetry, interactions",
@@ -168,6 +168,34 @@
       body:`Architectures that reuse information and recurse can self-improve and seed subsequent cycles — nature formalized.` },
   ];
 
+  // PLANT → ANIMAL → MAN → EQUATIONS → AI
+  const PLANT_AI = [
+    { key:"roots",  title:"Plant (Roots)", subtitle:"Biology-as-physics",
+      meta:"Phototrophy, distributed sensing",
+      y:1120, color:getVar("--root"),
+      body:"Energy capture, structural growth, environmental sensing without locomotion." },
+
+    { key:"trunk",  title:"Animal (Trunk)", subtitle:"Biology",
+      meta:"Locomotion, nervous coordination",
+      y:930, color:getVar("--trunk"),
+      body:"Mobility, adaptive behavior, predator–prey arms races." },
+
+    { key:"branch", title:"Man (Branching)", subtitle:"Social",
+      meta:"Language, culture, tools",
+      y:760, color:getVar("--branch"),
+      body:"Symbolic thought, cooperation, institutions." },
+
+    { key:"canopy", title:"Equations (Canopy)", subtitle:"Mathematical",
+      meta:"Abstraction, generalization",
+      y:570, color:getVar("--canopy"),
+      body:"Predictive models, optimization, compressed time." },
+
+    { key:"fruit",  title:"AI (Fruit)", subtitle:"Computational",
+      meta:"Recursion, synthetic learning",
+      y:380, color:getVar("--fruit"),
+      body:"Self-iterating intelligences, novel ontologies." }
+  ];
+
   // ---------- SVG helpers ----------
   const svgNS = "http://www.w3.org/2000/svg";
   const tree = document.getElementById("tree");
@@ -183,9 +211,10 @@
   function cbez(p0,p1,p2,p3){ return `M ${p0[0]},${p0[1]} C ${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${p3[0]},${p3[1]}`; }
   function r(seed){ seed = (seed*16807)%2147483647; return () => (seed = (seed*16807)%2147483647)/2147483647; }
 
-  let MODE = "life"; // "life" | "realms"
+  let MODE = 0; // 0=Life, 1=Realms, 2=Plant→AI
+  const MODE_NAMES = ["Life Stages", "Emergent Realms", "Plant → AI"];
 
-  function active(){ return MODE === "life" ? LIFE : REALMS; }
+  function active(){ return [LIFE, REALMS, PLANT_AI][MODE]; }
 
   function draw(seed=42){
     tree.innerHTML = ""; // clear
@@ -259,16 +288,17 @@
     }
 
     // Hotspots + labels from active dataset
+    const cxLabel = W/2;
     active().forEach((layer)=>{
       // halo
-      circle(cx,layer.y,54,{fill:"#ffffff", opacity:.02, class:"halo"});
+      circle(cxLabel,layer.y,54,{fill:"#ffffff", opacity:.02, class:"halo"});
       // ring
-      circle(cx,layer.y,38,{fill:"none", stroke:layer.color, "stroke-width":10, opacity:.9});
+      circle(cxLabel,layer.y,38,{fill:"none", stroke:layer.color, "stroke-width":10, opacity:.9});
       // labels
-      text(cx, layer.y-72, layer.title, {fill:getVar("--text"), "font-size":22, anchor:"middle"});
-      text(cx, layer.y-48, layer.subtitle, {fill:getVar("--dim"), "font-size":14, anchor:"middle"});
+      text(cxLabel, layer.y-72, layer.title, {fill:getVar("--text"), "font-size":22, anchor:"middle"});
+      text(cxLabel, layer.y-48, layer.subtitle, {fill:getVar("--dim"), "font-size":14, anchor:"middle"});
       // interaction
-      const hit=circle(cx,layer.y,60,{fill:"#000", opacity:0, cursor:"pointer"});
+      const hit=circle(cxLabel,layer.y,60,{fill:"#000", opacity:0, cursor:"pointer"});
       hit.addEventListener("click", ()=> openSheet(layer));
     });
   }
@@ -306,28 +336,383 @@
     el.textContent = str; tree.appendChild(el); return el;
   }
 
-  // --- wiring ---
   function setMode(next){
     MODE = next;
     const btn = document.getElementById("mode");
-    if(MODE === "life"){
-      btn.textContent = "⇄ Switch to Realms";
-      subtitle.innerHTML = 'Mode: <strong>Life Stages</strong> (right-hand arc is Younger → Older). Switch to <em>Emergent Realms</em> to see Physics → Computational mapping.';
-    } else {
-      btn.textContent = "⇄ Switch to Life";
-      subtitle.innerHTML = 'Mode: <strong>Emergent Realms</strong> (Physics → Biology → Social → Mathematical → Computational). Left arc shows recursion to the next cycle.';
-    }
+    btn.textContent = "⇄ Switch Mode";
+    subtitle.innerHTML = `Mode: <strong>${MODE_NAMES[MODE]}</strong> (press <span class="kbd">M</span> to switch).`;
     draw(Math.floor(Math.random()*1e6));
   }
 
+  // init
   draw(42);
   document.getElementById("randomize").onclick = () => draw(Math.floor(Math.random()*1e6));
-  document.getElementById("mode").onclick = () => setMode(MODE === "life" ? "realms" : "life");
+  document.getElementById("mode").onclick = () => setMode((MODE + 1) % 3);
 
   // keyboard shortcuts
   window.addEventListener("keydown", (e)=>{
     if(e.key.toLowerCase()==='r') draw(Math.floor(Math.random()*1e6));
-    if(e.key.toLowerCase()==='m') setMode(MODE === "life" ? "realms" : "life");
+    if(e.key.toLowerCase()==='m') setMode((MODE + 1) % 3);
+    if(e.key==='Escape') sheet.classList.remove('open');
+  });
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Ukubona Pentad — Triple Mode Map</title>
+<style>
+  :root{
+    --bg:#0b0d0f; --soil:#2c2b28; --root:#7b4b2a; --trunk:#6b523f;
+    --branch:#2f5f3b; --canopy:#51a06a; --haze:#7fcaa0; --fruit:#e55b58;
+    --seed:#f1c84e; --life:#5dd69b; --recur:#e56a6a; --text:#e7efe9; --dim:#a9b6ae;
+    --focus:#9fe8c6; --panel:#0b0d0f; --stroke:#1f2326;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    color:var(--text); background: radial-gradient(1200px 900px at 50% 0%, #0e1113, var(--bg));
+  }
+  .wrap{max-width:1200px;margin:0 auto;padding:20px}
+  .card{
+    background:#0a0c0e; border:1px solid var(--stroke); border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,.35);
+    overflow:hidden
+  }
+  header{padding:20px 20px 0 20px}
+  h1{font-size:22px; margin:0 0 4px}
+  .sub{color:var(--dim); font-size:14px; margin:0 0 12px}
+  .controls{display:flex; gap:10px; flex-wrap:wrap; padding:0 20px 10px}
+  .chip{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:12px;
+    border:1px solid #2a2f33; background:#0e1114; color:#cfd8d2; font-size:12px}
+  button.chip{cursor:pointer}
+  svg{display:block; width:100%; height:72vh; background:linear-gradient(#0a0c0e,#0d1012)}
+  .legend{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; padding:10px 20px 20px}
+  .legend .sw{display:inline-block;width:24px;height:3px;border-radius:2px;margin-right:8px;vertical-align:middle}
+  /* detail panel */
+  .sheet{
+    position: fixed; top:0; right:-460px; width:440px; max-width:92vw; height:100%;
+    background:var(--panel); border-left:1px solid var(--stroke); box-shadow:-20px 0 60px rgba(0,0,0,.4);
+    transition:right .35s ease; padding:22px; z-index:30; overflow:auto;
+  }
+  .sheet.open{ right:0; }
+  .sheet h2{margin:0 0 6px; font-size:20px}
+  .sheet .subline{color:var(--dim); margin:0 0 14px; font-size:13px}
+  .sheet .body{line-height:1.6; font-size:14px; color:#ced7d1}
+  .close{position:absolute; top:10px; right:14px; background:none; border:1px solid #2a2f33; color:#cfd8d2;
+    border-radius:10px; padding:6px 10px; cursor:pointer}
+  .halo{pointer-events:none}
+  .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:12px; padding:.1em .35em; border:1px solid #2a2f33; border-radius:6px; background:#0f1316}
+  .hint{color:#a9b6ae; font-size:12px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <h1>Ukubona Pentad — Triple Mode Map</h1>
+        <p class="sub" id="subtitle">Mode: <strong>Life Stages</strong> (right-hand arc is Younger → Older). Press <span class="kbd">M</span> to switch modes.</p>
+      </header>
+
+      <div class="controls">
+        <span class="chip"><span class="sw" style="background:var(--life)"></span>Life arc</span>
+        <span class="chip"><span class="sw" style="background:var(--recur)"></span>Recursion (thin, dashed)</span>
+        <button class="chip" id="mode">⇄ Switch Mode</button>
+        <button class="chip" id="randomize">↻ Randomize branches</button>
+      </div>
+
+      <!-- SVG SCENE -->
+      <svg id="scene" viewBox="0 0 1000 1200" role="img" aria-label="Ukubona Truth Tree">
+        <!-- soil bands -->
+        <rect x="0" y="1150" width="1000" height="16" fill="var(--soil)" opacity=".18"/>
+        <rect x="0" y="1132" width="1000" height="16" fill="var(--soil)" opacity=".14"/>
+        <rect x="0" y="1114" width="1000" height="16" fill="var(--soil)" opacity=".10"/>
+
+        <g id="tree"></g>
+
+        <!-- life arc (younger→older) -->
+        <defs>
+          <marker id="arrowTip" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--life)" />
+          </marker>
+          <marker id="arrowThin" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse">
+            <path d="M 0 0 L 8 4 L 0 8 z" fill="var(--recur)" />
+          </marker>
+        </defs>
+        <path id="lifeArc" d="M 880,1120 C 960,780 960,420 880,200" stroke="var(--life)" stroke-width="6" fill="none" marker-end="url(#arrowTip)" opacity=".95"/>
+        <text x="930" y="600" transform="rotate(-90 930 600)" text-anchor="middle" fill="#9fe8c6" font-size="20">Younger → Older</text>
+
+        <!-- recursion loop (thin) -->
+        <path id="recurArc" d="M 120,200 C 40,420 40,780 120,1120"
+              stroke="var(--recur)" stroke-width="3" stroke-dasharray="10 10"
+              fill="none" marker-end="url(#arrowThin)" opacity=".9"/>
+        <text x="70" y="600" transform="rotate(90 70 600)" text-anchor="middle" fill="#f3a2a2" font-size="14">Recursion → next cycle</text>
+      </svg>
+
+      <div class="legend" id="legend">
+        <div><span class="sw" style="background:var(--life)"></span>Younger → Older</div>
+        <div><span class="sw" style="background:var(--recur)"></span>Recursion (thin dashed)</div>
+        <div><span class="sw" style="background:var(--canopy)"></span>Canopy haze (integration)</div>
+      </div>
+    </div>
+    <p class="hint">Tip: click any ring to open details. Press <span class="kbd">R</span> to randomize branches, <span class="kbd">M</span> to toggle modes.</p>
+  </div>
+
+  <!-- Detail Sheet -->
+  <aside id="sheet" class="sheet" aria-hidden="true">
+    <button class="close" id="closeSheet">Close</button>
+    <h2 id="sTitle">Layer</h2>
+    <p id="sSub" class="subline"></p>
+    <div id="sBody" class="body"></div>
+    <p id="sMeta" class="subline" style="margin-top:16px; font-style:italic"></p>
+  </aside>
+
+<script>
+  // ---------- Data ----------
+  // LIFE STAGES
+  const LIFE = [
+    { key:"roots",  title:"Roots / Ukuvula",  subtitle:"Diet — Foundation",
+      meta:"Provisioning — energy & matter from earth & sun",
+      y:1120, color:getVar("--root"),
+      body:`Infancy & Early Childhood — Intake, sensory learning, nutrition. All later growth is contingent on richness and balance here.` },
+
+    { key:"trunk",  title:"Trunk / Ukuzula",  subtitle:"Fitness — Structure",
+      meta:"Embodiment — capacity, stamina, coordination",
+      y:930, color:getVar("--trunk"),
+      body:`Childhood → Adolescence — Building strength, stability, and motor intelligence. Movement is the conduit between environment and self.` },
+
+    { key:"branch", title:"Branching / Ukukona", subtitle:"Games — Exploration",
+      meta:"Cognition & culture — agency & strategy",
+      y:760, color:getVar("--branch"),
+      body:`Young Adulthood — Cognitive/social exploration; testing rules and inventing new ones. Divergence and emergent strategy take root.` },
+
+    { key:"canopy", title:"Canopy / Ukubona", subtitle:"Health — Integration",
+      meta:"Whole-system perception — context & horizon",
+      y:570, color:getVar("--canopy"),
+      body:`Mature Adulthood — Integrating domains into a coherent worldview of wellbeing. Decisions with context and longer horizons.` },
+
+    { key:"fruit",  title:"Fruit / Ukukula",  subtitle:"Aging — Legacy",
+      meta:"Recursion — harvest → seeds → next cycle",
+      y:380, color:getVar("--fruit"),
+      body:`Elderhood — Harvest and recursion. Knowledge transfer, mentoring, and seeding the next generation with embodied wisdom.` },
+  ];
+
+  // EMERGENT REALMS
+  const REALMS = [
+    { key:"roots",  title:"Physics (Roots)",  subtitle:"Ontology — constraints",
+      meta:"Conservation, symmetry, interactions",
+      y:1120, color:getVar("--root"),
+      body:`First principles set the filesystem of reality. Material/energetic substrate enables everything above.` },
+
+    { key:"trunk",  title:"Biology (Trunk)",  subtitle:"Epistemology — bounded mind",
+      meta:"Embodied sensing; limited bandwidth & context length",
+      y:930, color:getVar("--trunk"),
+      body:`Life must perceive, filter, and make meaning to survive under constraints, turning sensing into adaptive knowledge.` },
+
+    { key:"branch", title:"Social (Branching)", subtitle:"Agency — feedback loops",
+      meta:"Cooperation, competition, signaling, trust",
+      y:760, color:getVar("--branch"),
+      body:`Multiple agents with overlapping but distinct goals form norms, institutions, and collective memory across scales.` },
+
+    { key:"canopy", title:"Mathematical (Canopy)", subtitle:"Simulation — compressed time",
+      meta:"Abstraction, generalization, optimization",
+      y:570, color:getVar("--canopy"),
+      body:`Models accelerate exploration by trading fidelity for tractability; parallel twins let us rehearse futures before acting.` },
+
+    { key:"fruit",  title:"Computational (Fruit)",  subtitle:"Strategic intelligence — recursion",
+      meta:"Algorithms encode fruit→seed logic",
+      y:380, color:getVar("--fruit"),
+      body:`Architectures that reuse information and recurse can self-improve and seed subsequent cycles — nature formalized.` },
+  ];
+
+  // PLANT → ANIMAL → MAN → EQUATIONS → AI
+  const PLANT_AI = [
+    { key:"roots",  title:"Plant (Roots)", subtitle:"Biology-as-physics",
+      meta:"Phototrophy, distributed sensing",
+      y:1120, color:getVar("--root"),
+      body:"Energy capture, structural growth, environmental sensing without locomotion." },
+
+    { key:"trunk",  title:"Animal (Trunk)", subtitle:"Biology",
+      meta:"Locomotion, nervous coordination",
+      y:930, color:getVar("--trunk"),
+      body:"Mobility, adaptive behavior, predator–prey arms races." },
+
+    { key:"branch", title:"Man (Branching)", subtitle:"Social",
+      meta:"Language, culture, tools",
+      y:760, color:getVar("--branch"),
+      body:"Symbolic thought, cooperation, institutions." },
+
+    { key:"canopy", title:"Equations (Canopy)", subtitle:"Mathematical",
+      meta:"Abstraction, generalization",
+      y:570, color:getVar("--canopy"),
+      body:"Predictive models, optimization, compressed time." },
+
+    { key:"fruit",  title:"AI (Fruit)", subtitle:"Computational",
+      meta:"Recursion, synthetic learning",
+      y:380, color:getVar("--fruit"),
+      body:"Self-iterating intelligences, novel ontologies." }
+  ];
+
+  // ---------- SVG helpers ----------
+  const svgNS = "http://www.w3.org/2000/svg";
+  const tree = document.getElementById("tree");
+  const subtitle = document.getElementById("subtitle");
+  const sheet = document.getElementById("sheet");
+  const sTitle = document.getElementById("sTitle");
+  const sSub   = document.getElementById("sSub");
+  const sBody  = document.getElementById("sBody");
+  const sMeta  = document.getElementById("sMeta");
+  document.getElementById("closeSheet").onclick = () => sheet.classList.remove("open");
+
+  function getVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function cbez(p0,p1,p2,p3){ return `M ${p0[0]},${p0[1]} C ${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${p3[0]},${p3[1]}`; }
+  function r(seed){ seed = (seed*16807)%2147483647; return () => (seed = (seed*16807)%2147483647)/2147483647; }
+
+  let MODE = 0; // 0=Life, 1=Realms, 2=Plant→AI
+  const MODE_NAMES = ["Life Stages", "Emergent Realms", "Plant → AI"];
+
+  function active(){ return [LIFE, REALMS, PLANT_AI][MODE]; }
+
+  function draw(seed=42){
+    tree.innerHTML = ""; // clear
+    const rand = r(seed);
+    const W=1000, cx=W/2;
+
+    // Trunk (layered Beziers for thickness)
+    for(let j=0;j<5;j++){
+      const jitter = (rand()-0.5)*10;
+      const p0=[cx+jitter,1120-8];
+      const p3=[cx+jitter,550];
+      const p1=[cx-90+(rand()-0.5)*18,950];
+      const p2=[cx+90+(rand()-0.5)*18,720];
+      path(cbez(p0,p1,p2,p3), {stroke:getVar("--trunk"), "stroke-width":18-j*2.5, opacity:.55+j*.08});
+    }
+
+    // Roots (mirrored)
+    for(let k=0;k<7;k++){
+      const amp=240+k*28, base=1120-10;
+      const p0=[cx,base];
+      const p3L=[cx-(420-k*60), base+85+k*10];
+      const p1L=[cx-(120+k*18), base+10+k*2];
+      const p2L=[cx-amp, base+60+k*6];
+      const p3R=[cx+(420-k*60), base+85+k*10];
+      const p1R=[cx+(120+k*18), base+10+k*2];
+      const p2R=[cx+amp, base+60+k*6];
+      path(cbez(p0,p1L,p2L,p3L), {stroke:getVar("--root"), "stroke-width":6, opacity:.66});
+      path(cbez(p0,p1R,p2R,p3R), {stroke:getVar("--root"), "stroke-width":6, opacity:.66});
+    }
+
+    // Branches (with small recursive offshoots + canopy haze)
+    const levels=[800,720,650];
+    levels.forEach((ly,i)=>{
+      [-1,1].forEach(dir=>{
+        const span=340-i*70;
+        const p0=[cx,ly];
+        const p3=[cx+dir*(span + (rand()*40)), ly-(40+i*25)];
+        const p1=[cx+dir*(120+rand()*40), ly-10];
+        const p2=[cx+dir*(240+rand()*40), ly-(25+i*20)];
+        path(cbez(p0,p1,p2,p3), {stroke:getVar("--branch"), "stroke-width":10-i*2.5, opacity:.9});
+        for(let rr=0;rr<2;rr++){
+          const ox0=cx+dir*(180+rr*40+rand()*20);
+          const oy0=ly-(10+rr*10);
+          const ox3=cx+dir*(span*.78+rand()*30);
+          const oy3=ly-(0+rr*18);
+          const ox1=ox0+dir*(40+rand()*10);
+          const oy1=oy0+8;
+          const ox2=ox3-dir*(40+rand()*10);
+          const oy2=oy3-6;
+          path(cbez([ox0,oy0],[ox1,oy1],[ox2,oy2],[ox3,oy3]), {stroke:getVar("--branch"), "stroke-width":5-rr, opacity:.55});
+          // a little leaf haze
+          circle(ox3,oy3, 12+rand()*10, {fill:getVar("--canopy"), opacity:.08+rand()*.06});
+        }
+      });
+    });
+
+    // Canopy haze field
+    for(let i=0;i<160;i++){
+      const x=180+rand()*(W-360);
+      const y=470+rand()*160;
+      const rr=12+rand()*28;
+      circle(x,y,rr,{fill:getVar("--haze"), opacity:.04+rand()*.06});
+    }
+
+    // Fruit + seeds (computational recursion metaphor)
+    for(let i=0;i<8;i++){
+      const x=180+i*((W-360)/7);
+      const y=320 + Math.sin(i*.8)*10;
+      circle(x,y,14,{fill:getVar("--fruit")});
+      circle(x,y+26,9.5,{fill:getVar("--seed"), opacity:.9});
+    }
+
+    // Hotspots + labels from active dataset
+    const cxLabel = W/2;
+    active().forEach((layer)=>{
+      // halo
+      circle(cxLabel,layer.y,54,{fill:"#ffffff", opacity:.02, class:"halo"});
+      // ring
+      circle(cxLabel,layer.y,38,{fill:"none", stroke:layer.color, "stroke-width":10, opacity:.9});
+      // labels
+      text(cxLabel, layer.y-72, layer.title, {fill:getVar("--text"), "font-size":22, anchor:"middle"});
+      text(cxLabel, layer.y-48, layer.subtitle, {fill:getVar("--dim"), "font-size":14, anchor:"middle"});
+      // interaction
+      const hit=circle(cxLabel,layer.y,60,{fill:"#000", opacity:0, cursor:"pointer"});
+      hit.addEventListener("click", ()=> openSheet(layer));
+    });
+  }
+
+  function openSheet(layer){
+    sTitle.textContent = layer.title;
+    sSub.textContent   = layer.subtitle;
+    sBody.textContent  = layer.body;
+    sMeta.textContent  = "Meta: " + layer.meta;
+    sheet.classList.add("open");
+    sheet.setAttribute("aria-hidden","false");
+  }
+
+  // SVG element creators
+  function path(d, attrs){
+    const el=document.createElementNS(svgNS,"path");
+    el.setAttribute("d", d);
+    el.setAttribute("fill","none");
+    for(const k in attrs){ el.setAttribute(k, attrs[k]); }
+    tree.appendChild(el);
+    return el;
+  }
+  function circle(cx,cy,r,attrs){
+    const el=document.createElementNS(svgNS,"circle");
+    el.setAttribute("cx",cx); el.setAttribute("cy",cy); el.setAttribute("r",r);
+    for(const k in attrs){ el.setAttribute(k, attrs[k]); }
+    tree.appendChild(el); return el;
+  }
+  function text(x,y,str,attrs){
+    const el=document.createElementNS(svgNS,"text");
+    el.setAttribute("x",x); el.setAttribute("y",y);
+    el.setAttribute("text-anchor", attrs.anchor||"start");
+    delete attrs.anchor;
+    for(const k in attrs){ el.setAttribute(k, attrs[k]); }
+    el.textContent = str; tree.appendChild(el); return el;
+  }
+
+  function setMode(next){
+    MODE = next;
+    const btn = document.getElementById("mode");
+    btn.textContent = "⇄ Switch Mode";
+    subtitle.innerHTML = `Mode: <strong>${MODE_NAMES[MODE]}</strong> (press <span class="kbd">M</span> to switch).`;
+    draw(Math.floor(Math.random()*1e6));
+  }
+
+  // init
+  draw(42);
+  document.getElementById("randomize").onclick = () => draw(Math.floor(Math.random()*1e6));
+  document.getElementById("mode").onclick = () => setMode((MODE + 1) % 3);
+
+  // keyboard shortcuts
+  window.addEventListener("keydown", (e)=>{
+    if(e.key.toLowerCase()==='r') draw(Math.floor(Math.random()*1e6));
+    if(e.key.toLowerCase()==='m') setMode((MODE + 1) % 3);
     if(e.key==='Escape') sheet.classList.remove('open');
   });
 </script>
