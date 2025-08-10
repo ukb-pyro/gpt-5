@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Ukubona Pentad — Five Mode Map (with NAMES)</title>
+<title>Ukubona Pentad — Five Mode Map (with GAMES)</title>
 <style>
   :root{
     --bg:#0b0d0f; --soil:#2c2b28; --root:#7b4b2a; --trunk:#6b523f;
@@ -97,7 +97,7 @@
         <div><span class="sw" style="background:var(--life)"></span>Younger → Older</div>
         <div><span class="sw" style="background:var(--recur)"></span>Recursion (thin dashed)</div>
         <div><span class="sw" style="background:var(--canopy)"></span>Canopy haze (integration)</div>
-        <div><span class="sw" style="background:var(--accent)"></span>Pentad Companies / NAMES mode</div>
+        <div><span class="sw" style="background:var(--accent)"></span>Pentad Companies / GAMES mode</div>
       </div>
     </div>
     <p class="hint">Tip: click any ring to open details. Press <span class="kbd">R</span> to randomize branches, <span class="kbd">M</span> to toggle modes.</p>
@@ -227,32 +227,32 @@
       body:`Aging pipeline — combining Fried’s frailty phenotype (75+) with lifelong wearable-derived vitality metrics; supports decisions around ADLs, dignity thresholds (<0), and family network impacts.` },
   ];
 
-  // NAMES (Nature, Animal, Man, Enterprise, Systems)
-  const NAMES = [
-    { key:"roots",  title:"Nature (Roots)", subtitle:"Substrate — energy & matter",
-      meta:"Ecology, resources, constraints",
+  // GAMES (God, Animal, Man, Enterprise, System)
+  const GAMES = [
+    { key:"roots",  title:"God (Roots)", subtitle:"Meaning of the earth → ground of value",
+      meta:"Cosmos, constraint, sacred substrate",
       y:1120, color:getVar("--root"),
-      body:`Earth-first: thermodynamics, cycles, limits. The meaning of the earth as the ground of value.` },
+      body:`Primordial order and limit. The pre-contract that reality writes: thermodynamics, time, and scarcity. Nietzsche’s earth against sky-castles.` },
 
     { key:"trunk",  title:"Animal (Trunk)", subtitle:"Embodiment — instinct & movement",
-      meta:"Sensing, locomotion, survival",
+      meta:"Perception–action loops; survival",
       y:930, color:getVar("--trunk"),
-      body:`Perception-action loops, bounded rationality, fitness as lived computation.` },
+      body:`Drives, fitness, and bounded rationality. Where vitality is computed in gait, cadence, and recovery.` },
 
     { key:"branch", title:"Man (Branching)", subtitle:"Agency — culture & tools",
       meta:"Language, coordination, institutions",
       y:760, color:getVar("--branch"),
-      body:`Symbolic reason, norms, markets, science — divergent exploration and design.` },
+      body:`Symbolic play and norm-making. The worker/serf/API roles arise here—interfaces between will and infrastructure.` },
 
-    { key:"canopy", title:"Enterprise (Canopy)", subtitle:"Organization — projects & tech",
+    { key:"canopy", title:"Enterprise (Canopy)", subtitle:"Organization — projects & platforms",
       meta:"Firms, platforms, governance",
       y:570, color:getVar("--canopy"),
-      body:`Coordinated effort that scales intent into capability; bridges ideas into durable systems.` },
+      body:`Collective intent scaled. Platforms compress many human games into protocols; capital and code braid together.` },
 
-    { key:"fruit",  title:"Systems (Fruit)", subtitle:"Orchestration — recursion & emergence",
-      meta:"Interdependence, feedback, resilience",
+    { key:"fruit",  title:"System (Fruit)", subtitle:"Orchestration — recursion & emergence",
+      meta:"Feedback, resilience, self-improvement",
       y:380, color:getVar("--fruit"),
-      body:`Designing environments that design successors. Energy, security, sustainability as subsystems; self-improving loops.` },
+      body:`When platforms harden into environments that write their own successors. The API gives way to the ecology; the double-helix of Marx (production relations) and Nietzsche (value-creation) twists into continuous redesign.` },
   ];
 
   // ---------- SVG helpers ----------
@@ -270,10 +270,10 @@
   function cbez(p0,p1,p2,p3){ return `M ${p0[0]},${p0[1]} C ${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${p3[0]},${p3[1]}`; }
   function r(seed){ seed = (seed*16807)%2147483647; return () => (seed = (seed*16807)%2147483647)/2147483647; }
 
-  let MODE = 0; // 0=Life, 1=Realms, 2=Plant→AI, 3=Pentad Companies, 4=NAMES
-  const MODE_NAMES = ["Life Stages", "Emergent Realms", "Plant → AI", "Pentad Companies", "NAMES Pentad"];
+  let MODE = 0; // 0=Life, 1=Realms, 2=Plant→AI, 3=Pentad Companies, 4=GAMES
+  const MODE_NAMES = ["Life Stages", "Emergent Realms", "Plant → AI", "Pentad Companies", "GAMES Pentad"];
 
-  function active(){ return [LIFE, REALMS, PLANT_AI, PENTAD, NAMES][MODE]; }
+  function active(){ return [LIFE, REALMS, PLANT_AI, PENTAD, GAMES][MODE]; }
 
   function draw(seed=42){
     tree.innerHTML = ""; // clear
@@ -351,7 +351,7 @@
     active().forEach((layer)=>{
       // halo
       circle(cxLabel,layer.y,54,{fill:"#ffffff", opacity:.02, class:"halo"});
-      // ring (accent ring for Pentad & NAMES modes)
+      // ring (accent ring for Pentad & GAMES modes)
       const strokeCol = ((MODE===3 || MODE===4) ? getVar("--accent") : layer.color);
       circle(cxLabel,layer.y,38,{fill:"none", stroke:strokeCol, "stroke-width":10, opacity:.9});
       // labels
@@ -372,8 +372,8 @@
 
     if(MODE===4){
       cornerBadges([
-        "S = Systems: orchestration & emergence",
-        "Energy/Security/Sustainability as subsystems",
+        "G = God → ground of value",
+        "E/S = Enterprise/System: platforms → ecologies",
       ]);
     }
   }
