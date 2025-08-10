@@ -3,21 +3,23 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Ukubona Pentad — Life Stages & Meta Alignment</title>
+<title>Ukubona Pentad — Emergence & Recursion Map</title>
 <style>
   :root{
     --bg:#0b0d0f; --soil:#2c2b28; --root:#7b4b2a; --trunk:#6b523f;
     --branch:#2f5f3b; --canopy:#51a06a; --haze:#7fcaa0; --fruit:#e55b58;
     --seed:#f1c84e; --life:#5dd69b; --recur:#e56a6a; --text:#e7efe9; --dim:#a9b6ae;
+    --focus:#9fe8c6; --panel:#0b0d0f; --stroke:#1f2326;
   }
   *{box-sizing:border-box}
+  html,body{height:100%}
   body{
     margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
     color:var(--text); background: radial-gradient(1200px 900px at 50% 0%, #0e1113, var(--bg));
   }
   .wrap{max-width:1200px;margin:0 auto;padding:20px}
   .card{
-    background:#0a0c0e; border:1px solid #1f2326; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,.35);
+    background:#0a0c0e; border:1px solid var(--stroke); border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,.35);
     overflow:hidden
   }
   header{padding:20px 20px 0 20px}
@@ -28,12 +30,12 @@
     border:1px solid #2a2f33; background:#0e1114; color:#cfd8d2; font-size:12px}
   button.chip{cursor:pointer}
   svg{display:block; width:100%; height:72vh; background:linear-gradient(#0a0c0e,#0d1012)}
-  .legend{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; padding:10px 20px 20px}
+  .legend{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; padding:10px 20px 20px}
   .legend .sw{display:inline-block;width:24px;height:3px;border-radius:2px;margin-right:8px;vertical-align:middle}
   /* detail panel */
   .sheet{
-    position: fixed; top:0; right:-440px; width:420px; max-width:90vw; height:100%;
-    background:#0b0d0f; border-left:1px solid #1f2326; box-shadow:-20px 0 60px rgba(0,0,0,.4);
+    position: fixed; top:0; right:-460px; width:440px; max-width:92vw; height:100%;
+    background:var(--panel); border-left:1px solid var(--stroke); box-shadow:-20px 0 60px rgba(0,0,0,.4);
     transition:right .35s ease; padding:22px; z-index:30; overflow:auto;
   }
   .sheet.open{ right:0; }
@@ -43,19 +45,22 @@
   .close{position:absolute; top:10px; right:14px; background:none; border:1px solid #2a2f33; color:#cfd8d2;
     border-radius:10px; padding:6px 10px; cursor:pointer}
   .halo{pointer-events:none}
+  .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:12px; padding:.1em .35em; border:1px solid #2a2f33; border-radius:6px; background:#0f1316}
+  .hint{color:#a9b6ae; font-size:12px}
 </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <header>
-        <h1>Ukubona Pentad — Life Stages & Meta Alignment</h1>
-        <p class="sub">Younger → Older (right-hand arc). Click any stratum for details.</p>
+        <h1>Ukubona Pentad — Emergence & Recursion Map</h1>
+        <p class="sub" id="subtitle">Mode: <strong>Life Stages</strong> (right-hand arc is Younger → Older). Switch to <em>Emergent Realms</em> to see Physics → Computational mapping.</p>
       </header>
 
       <div class="controls">
         <span class="chip"><span class="sw" style="background:var(--life)"></span>Life arc</span>
         <span class="chip"><span class="sw" style="background:var(--recur)"></span>Recursion (thin, dashed)</span>
+        <button class="chip" id="mode">⇄ Switch to Realms</button>
         <button class="chip" id="randomize">↻ Randomize branches</button>
       </div>
 
@@ -87,12 +92,13 @@
         <text x="70" y="600" transform="rotate(90 70 600)" text-anchor="middle" fill="#f3a2a2" font-size="14">Recursion → next cycle</text>
       </svg>
 
-      <div class="legend">
+      <div class="legend" id="legend">
         <div><span class="sw" style="background:var(--life)"></span>Younger → Older</div>
         <div><span class="sw" style="background:var(--recur)"></span>Recursion (thin dashed)</div>
         <div><span class="sw" style="background:var(--canopy)"></span>Canopy haze (integration)</div>
       </div>
     </div>
+    <p class="hint">Tip: click any ring to open details. Press <span class="kbd">R</span> to randomize branches, <span class="kbd">M</span> to toggle modes.</p>
   </div>
 
   <!-- Detail Sheet -->
@@ -105,37 +111,67 @@
   </aside>
 
 <script>
-  // ---------- Data (edit these texts/colors freely) ----------
-  const PENTAD = [
-    { key:"roots",    title:"Roots / Ukuvula",    subtitle:"Diet — Foundation",
-      meta:"God's provisioning — energy & matter from earth/sun",
-      y: 1120, color:getVar("--root"),
-      body:"Infancy & Early Childhood — Intake, sensory learning, nutrition. All later growth is contingent on richness and balance here." },
+  // ---------- Data ----------
+  // LIFE STAGES (your original mapping, lightly edited)
+  const LIFE = [
+    { key:"roots",  title:"Roots / Ukuvula",  subtitle:"Diet — Foundation",
+      meta:"Provisioning — energy & matter from earth & sun",
+      y:1120, color:getVar("--root"),
+      body:`Infancy & Early Childhood — Intake, sensory learning, nutrition. All later growth is contingent on richness and balance here.` },
 
-    { key:"trunk",    title:"Trunk / Ukuzula",    subtitle:"Fitness — Structure",
-      meta:"Man's embodiment — capacity, stamina, coordination",
-      y: 930, color:getVar("--trunk"),
-      body:"Childhood → Adolescence — Building strength, stability, and motor intelligence. Movement is the conduit between environment and self." },
+    { key:"trunk",  title:"Trunk / Ukuzula",  subtitle:"Fitness — Structure",
+      meta:"Embodiment — capacity, stamina, coordination",
+      y:930, color:getVar("--trunk"),
+      body:`Childhood → Adolescence — Building strength, stability, and motor intelligence. Movement is the conduit between environment and self.` },
 
-    { key:"branch",   title:"Branching / Ukukona", subtitle:"Games — Exploration",
-      meta:"Man's cognition & culture — agency & strategy",
-      y: 760, color:getVar("--branch"),
-      body:"Young Adulthood — Cognitive/social exploration; testing rules and inventing new ones. Divergence and emergent strategy take root." },
+    { key:"branch", title:"Branching / Ukukona", subtitle:"Games — Exploration",
+      meta:"Cognition & culture — agency & strategy",
+      y:760, color:getVar("--branch"),
+      body:`Young Adulthood — Cognitive/social exploration; testing rules and inventing new ones. Divergence and emergent strategy take root.` },
 
-    { key:"canopy",   title:"Canopy / Ukubona",   subtitle:"Health — Integration",
-      meta:"God's omniscience — whole-system perception",
-      y: 570, color:getVar("--canopy"),
-      body:"Mature Adulthood — Integrating domains into a coherent worldview of wellbeing. Decisions with context and longer horizons." },
+    { key:"canopy", title:"Canopy / Ukubona", subtitle:"Health — Integration",
+      meta:"Whole-system perception — context & horizon",
+      y:570, color:getVar("--canopy"),
+      body:`Mature Adulthood — Integrating domains into a coherent worldview of wellbeing. Decisions with context and longer horizons.` },
 
-    { key:"fruit",    title:"Fruit / Ukukula",    subtitle:"Aging — Legacy",
-      meta:"AI-like recursion — harvest → seeds → next cycle",
-      y: 380, color:getVar("--fruit"),
-      body:"Elderhood — Harvest and recursion. Knowledge transfer, mentoring, and seeding the next generation with embodied wisdom." },
+    { key:"fruit",  title:"Fruit / Ukukula",  subtitle:"Aging — Legacy",
+      meta:"Recursion — harvest → seeds → next cycle",
+      y:380, color:getVar("--fruit"),
+      body:`Elderhood — Harvest and recursion. Knowledge transfer, mentoring, and seeding the next generation with embodied wisdom.` },
+  ];
+
+  // EMERGENT REALMS (first principles in five realms)
+  const REALMS = [
+    { key:"roots",  title:"Physics (Roots)",  subtitle:"Ontology — constraints",
+      meta:"Conservation, symmetry, interactions",
+      y:1120, color:getVar("--root"),
+      body:`First principles set the filesystem of reality. Material/energetic substrate enables everything above.` },
+
+    { key:"trunk",  title:"Biology (Trunk)",  subtitle:"Epistemology — bounded mind",
+      meta:"Embodied sensing; limited bandwidth & context length",
+      y:930, color:getVar("--trunk"),
+      body:`Life must perceive, filter, and make meaning to survive under constraints, turning sensing into adaptive knowledge.` },
+
+    { key:"branch", title:"Social (Branching)", subtitle:"Agency — feedback loops",
+      meta:"Cooperation, competition, signaling, trust",
+      y:760, color:getVar("--branch"),
+      body:`Multiple agents with overlapping but distinct goals form norms, institutions, and collective memory across scales.` },
+
+    { key:"canopy", title:"Mathematical (Canopy)", subtitle:"Simulation — compressed time",
+      meta:"Abstraction, generalization, optimization",
+      y:570, color:getVar("--canopy"),
+      body:`Models accelerate exploration by trading fidelity for tractability; parallel twins let us rehearse futures before acting.` },
+
+    { key:"fruit",  title:"Computational (Fruit)",  subtitle:"Strategic intelligence — recursion",
+      meta:"Algorithms encode fruit→seed logic",
+      y:380, color:getVar("--fruit"),
+      body:`Architectures that reuse information and recurse can self-improve and seed subsequent cycles — nature formalized.` },
   ];
 
   // ---------- SVG helpers ----------
   const svgNS = "http://www.w3.org/2000/svg";
   const tree = document.getElementById("tree");
+  const subtitle = document.getElementById("subtitle");
   const sheet = document.getElementById("sheet");
   const sTitle = document.getElementById("sTitle");
   const sSub   = document.getElementById("sSub");
@@ -146,6 +182,10 @@
   function getVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
   function cbez(p0,p1,p2,p3){ return `M ${p0[0]},${p0[1]} C ${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${p3[0]},${p3[1]}`; }
   function r(seed){ seed = (seed*16807)%2147483647; return () => (seed = (seed*16807)%2147483647)/2147483647; }
+
+  let MODE = "life"; // "life" | "realms"
+
+  function active(){ return MODE === "life" ? LIFE : REALMS; }
 
   function draw(seed=42){
     tree.innerHTML = ""; // clear
@@ -186,16 +226,16 @@
         const p1=[cx+dir*(120+rand()*40), ly-10];
         const p2=[cx+dir*(240+rand()*40), ly-(25+i*20)];
         path(cbez(p0,p1,p2,p3), {stroke:getVar("--branch"), "stroke-width":10-i*2.5, opacity:.9});
-        for(let r=0;r<2;r++){
-          const ox0=cx+dir*(180+r*40+rand()*20);
-          const oy0=ly-(10+r*10);
+        for(let rr=0;rr<2;rr++){
+          const ox0=cx+dir*(180+rr*40+rand()*20);
+          const oy0=ly-(10+rr*10);
           const ox3=cx+dir*(span*.78+rand()*30);
-          const oy3=ly-(0+r*18);
+          const oy3=ly-(0+rr*18);
           const ox1=ox0+dir*(40+rand()*10);
           const oy1=oy0+8;
           const ox2=ox3-dir*(40+rand()*10);
           const oy2=oy3-6;
-          path(cbez([ox0,oy0],[ox1,oy1],[ox2,oy2],[ox3,oy3]), {stroke:getVar("--branch"), "stroke-width":5-r, opacity:.55});
+          path(cbez([ox0,oy0],[ox1,oy1],[ox2,oy2],[ox3,oy3]), {stroke:getVar("--branch"), "stroke-width":5-rr, opacity:.55});
           // a little leaf haze
           circle(ox3,oy3, 12+rand()*10, {fill:getVar("--canopy"), opacity:.08+rand()*.06});
         }
@@ -206,11 +246,11 @@
     for(let i=0;i<160;i++){
       const x=180+rand()*(W-360);
       const y=470+rand()*160;
-      const r=12+rand()*28;
-      circle(x,y,r,{fill:getVar("--haze"), opacity:.04+rand()*.06});
+      const rr=12+rand()*28;
+      circle(x,y,rr,{fill:getVar("--haze"), opacity:.04+rand()*.06});
     }
 
-    // Fruit + seeds
+    // Fruit + seeds (computational recursion metaphor)
     for(let i=0;i<8;i++){
       const x=180+i*((W-360)/7);
       const y=320 + Math.sin(i*.8)*10;
@@ -218,8 +258,8 @@
       circle(x,y+26,9.5,{fill:getVar("--seed"), opacity:.9});
     }
 
-    // Hotspots + labels
-    PENTAD.forEach((layer, idx)=>{
+    // Hotspots + labels from active dataset
+    active().forEach((layer)=>{
       // halo
       circle(cx,layer.y,54,{fill:"#ffffff", opacity:.02, class:"halo"});
       // ring
@@ -229,9 +269,7 @@
       text(cx, layer.y-48, layer.subtitle, {fill:getVar("--dim"), "font-size":14, anchor:"middle"});
       // interaction
       const hit=circle(cx,layer.y,60,{fill:"#000", opacity:0, cursor:"pointer"});
-      hit.addEventListener("click", ()=>{
-        openSheet(layer);
-      });
+      hit.addEventListener("click", ()=> openSheet(layer));
     });
   }
 
@@ -268,9 +306,30 @@
     el.textContent = str; tree.appendChild(el); return el;
   }
 
+  // --- wiring ---
+  function setMode(next){
+    MODE = next;
+    const btn = document.getElementById("mode");
+    if(MODE === "life"){
+      btn.textContent = "⇄ Switch to Realms";
+      subtitle.innerHTML = 'Mode: <strong>Life Stages</strong> (right-hand arc is Younger → Older). Switch to <em>Emergent Realms</em> to see Physics → Computational mapping.';
+    } else {
+      btn.textContent = "⇄ Switch to Life";
+      subtitle.innerHTML = 'Mode: <strong>Emergent Realms</strong> (Physics → Biology → Social → Mathematical → Computational). Left arc shows recursion to the next cycle.';
+    }
+    draw(Math.floor(Math.random()*1e6));
+  }
+
   draw(42);
   document.getElementById("randomize").onclick = () => draw(Math.floor(Math.random()*1e6));
+  document.getElementById("mode").onclick = () => setMode(MODE === "life" ? "realms" : "life");
+
+  // keyboard shortcuts
+  window.addEventListener("keydown", (e)=>{
+    if(e.key.toLowerCase()==='r') draw(Math.floor(Math.random()*1e6));
+    if(e.key.toLowerCase()==='m') setMode(MODE === "life" ? "realms" : "life");
+    if(e.key==='Escape') sheet.classList.remove('open');
+  });
 </script>
 </body>
 </html>
-
