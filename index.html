@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Ukubona Pentad — Five Mode Map (with GAMES)</title>
+<title>Ukubona Pentad — Interactive Map (v2)</title>
 <style>
   :root{
     --bg:#0b0d0f; --soil:#2c2b28; --root:#7b4b2a; --trunk:#6b523f;
@@ -30,14 +30,11 @@
     border:1px solid #2a2f33; background:#0e1114; color:#cfd8d2; font-size:12px}
   button.chip{cursor:pointer}
   svg{display:block; width:100%; height:72vh; background:linear-gradient(#0a0c0e,#0d1012)}
-  .legend{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; padding:10px 20px 20px}
+  .legend{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; padding:10px 20px 20px}
   .legend .sw{display:inline-block;width:24px;height:3px;border-radius:2px;margin-right:8px;vertical-align:middle}
-  /* detail panel */
-  .sheet{
-    position: fixed; top:0; right:-460px; width:440px; max-width:92vw; height:100%;
+  .sheet{ position: fixed; top:0; right:-460px; width:440px; max-width:92vw; height:100%;
     background:var(--panel); border-left:1px solid var(--stroke); box-shadow:-20px 0 60px rgba(0,0,0,.4);
-    transition:right .35s ease; padding:22px; z-index:30; overflow:auto;
-  }
+    transition:right .35s ease; padding:22px; z-index:30; overflow:auto; }
   .sheet.open{ right:0; }
   .sheet h2{margin:0 0 6px; font-size:20px}
   .sheet .subline{color:var(--dim); margin:0 0 14px; font-size:13px}
@@ -45,17 +42,18 @@
   .close{position:absolute; top:10px; right:14px; background:none; border:1px solid #2a2f33; color:#cfd8d2;
     border-radius:10px; padding:6px 10px; cursor:pointer}
   .halo{pointer-events:none}
-  .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:12px; padding:.1em .35em; border:1px solid #2a2f33; border-radius:6px; background:#0f1316}
+  .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size:12px; padding:.1em .35em; border:1px solid #2a2f33; border-radius:6px; background:#0f1316}
   .hint{color:#a9b6ae; font-size:12px}
   .badge{display:inline-block; padding:2px 6px; border:1px solid #2a2f33; border-radius:8px; font-size:11px; margin-right:6px}
+  @media (max-width: 640px){ svg{height:68vh} h1{font-size:18px} .sub{font-size:13px} }
 </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <header>
-        <h1>Ukubona Pentad — Five Mode Map</h1>
-        <p class="sub" id="subtitle">Mode: <strong>Life Stages</strong> — fractal role of <strong>Ukubona LLC</strong> within a five-company stack. Press <span class="kbd">M</span> to switch modes.</p>
+        <h1>Ukubona Pentad — Interactive Map</h1>
+        <p class="sub" id="subtitle">Mode: <strong>Life Stages</strong> — fractal role of <strong>Ukubona LLC</strong> across stacked ontologies. Press <span class="kbd">M</span> to switch modes.</p>
       </header>
 
       <div class="controls">
@@ -63,6 +61,7 @@
         <span class="chip"><span class="sw" style="background:var(--recur)"></span>Recursion (thin, dashed)</span>
         <button class="chip" id="mode">⇄ Switch Mode</button>
         <button class="chip" id="randomize">↻ Randomize branches</button>
+        <button class="chip" id="help">? Help</button>
       </div>
 
       <!-- SVG SCENE -->
@@ -71,10 +70,8 @@
         <rect x="0" y="1150" width="1000" height="16" fill="var(--soil)" opacity=".18"/>
         <rect x="0" y="1132" width="1000" height="16" fill="var(--soil)" opacity=".14"/>
         <rect x="0" y="1114" width="1000" height="16" fill="var(--soil)" opacity=".10"/>
-
         <g id="tree"></g>
-
-        <!-- life arc (younger→older) -->
+        <!-- defs -->
         <defs>
           <marker id="arrowTip" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse">
             <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--life)" />
@@ -83,13 +80,11 @@
             <path d="M 0 0 L 8 4 L 0 8 z" fill="var(--recur)" />
           </marker>
         </defs>
+        <!-- life arc (younger→older) -->
         <path id="lifeArc" d="M 880,1120 C 960,780 960,420 880,200" stroke="var(--life)" stroke-width="6" fill="none" marker-end="url(#arrowTip)" opacity=".95"/>
         <text x="930" y="600" transform="rotate(-90 930 600)" text-anchor="middle" fill="#9fe8c6" font-size="20">Younger → Older</text>
-
         <!-- recursion loop (thin) -->
-        <path id="recurArc" d="M 120,200 C 40,420 40,780 120,1120"
-              stroke="var(--recur)" stroke-width="3" stroke-dasharray="10 10"
-              fill="none" marker-end="url(#arrowThin)" opacity=".9"/>
+        <path id="recurArc" d="M 120,200 C 40,420 40,780 120,1120" stroke="var(--recur)" stroke-width="3" stroke-dasharray="10 10" fill="none" marker-end="url(#arrowThin)" opacity=".9"/>
         <text x="70" y="600" transform="rotate(90 70 600)" text-anchor="middle" fill="#f3a2a2" font-size="14">Recursion → next cycle</text>
       </svg>
 
@@ -97,7 +92,7 @@
         <div><span class="sw" style="background:var(--life)"></span>Younger → Older</div>
         <div><span class="sw" style="background:var(--recur)"></span>Recursion (thin dashed)</div>
         <div><span class="sw" style="background:var(--canopy)"></span>Canopy haze (integration)</div>
-        <div><span class="sw" style="background:var(--accent)"></span>Pentad Companies / GAMES mode</div>
+        <div><span class="sw" style="background:var(--accent)"></span>Highlight (Pentad & GAMES modes)</div>
       </div>
     </div>
     <p class="hint">Tip: click any ring to open details. Press <span class="kbd">R</span> to randomize branches, <span class="kbd">M</span> to toggle modes.</p>
@@ -154,7 +149,7 @@
       y:930, color:getVar("--trunk"),
       body:`Life must perceive, filter, and make meaning to survive under constraints, turning sensing into adaptive knowledge.` },
 
-    { key:"branch", title:"Social (Branching)", subtitle:"Agency — feedback loops",
+    { key:"branch", title:"Sociology (Branching)", subtitle:"Agency — feedback loops",
       meta:"Cooperation, competition, signaling, trust",
       y:760, color:getVar("--branch"),
       body:`Multiple agents with overlapping but distinct goals form norms, institutions, and collective memory across scales.` },
@@ -198,10 +193,9 @@
       body:"Self-iterating intelligences, novel ontologies." }
   ];
 
-  // PENTAD COMPANIES (five companies across life stages)
-  // Remember: Ukubona LLC is the nervous system within the larger healthcare stack
+  // PENTAD COMPANIES
   const PENTAD = [
-    { key:"roots",  title:"Ukuvula — Provisioning", subtitle:"Roots (0→) — Food, environment, determinants",
+    { key:"roots",  title:"Ukuvula — Provisioning", subtitle:"Roots — Food, environment, determinants",
       meta:"Company 1 of 5 — Foundation / North America→Global",
       y:1120, color:getVar("--root"),
       body:`Provisioning of energy & matter: nutrition, housing, environment. Interfaces with public health & retail supply chains.` },
@@ -232,7 +226,7 @@
     { key:"roots",  title:"God (Roots)", subtitle:"Meaning of the earth → ground of value",
       meta:"Cosmos, constraint, sacred substrate",
       y:1120, color:getVar("--root"),
-      body:`Primordial order and limit. The pre-contract that reality writes: thermodynamics, time, and scarcity. Nietzsche’s earth against sky-castles.` },
+      body:`Primordial order and limit. Thermodynamics, time, scarcity — the pre-contract reality writes. Nietzsche’s earth against sky-castles.` },
 
     { key:"trunk",  title:"Animal (Trunk)", subtitle:"Embodiment — instinct & movement",
       meta:"Perception–action loops; survival",
@@ -242,7 +236,7 @@
     { key:"branch", title:"Man (Branching)", subtitle:"Agency — culture & tools",
       meta:"Language, coordination, institutions",
       y:760, color:getVar("--branch"),
-      body:`Symbolic play and norm-making. The worker/serf/API roles arise here—interfaces between will and infrastructure.` },
+      body:`Symbolic play and norm-making. The worker/serf/API roles arise here — interfaces between will and infrastructure.` },
 
     { key:"canopy", title:"Enterprise (Canopy)", subtitle:"Organization — projects & platforms",
       meta:"Firms, platforms, governance",
@@ -253,6 +247,34 @@
       meta:"Feedback, resilience, self-improvement",
       y:380, color:getVar("--fruit"),
       body:`When platforms harden into environments that write their own successors. The API gives way to the ecology; the double-helix of Marx (production relations) and Nietzsche (value-creation) twists into continuous redesign.` },
+  ];
+
+  // NEW: PBSMC + Neuron Pentad (Camus→Orwell metamorphoses + e = Y – ŷ)
+  const PBSMC = [
+    { key:"roots",  title:"P — Physics (Roots)", subtitle:"Unattainable zero; constraints",
+      meta:"Photons, electrons, bonds, molecules, storage; entropy as irreducible gap (e = Y – ŷ)",
+      y:1120, color:getVar("--root"),
+      body:`First principles: conservation and noise. Absolute zero (zero error) is a fantasy; entropy keeps e > 0.` },
+
+    { key:"trunk",  title:"B — Biology (Trunk)", subtitle:"Energy gradients & flows",
+      meta:"ATP with leakage; efficiency vs heat",
+      y:930, color:getVar("--trunk"),
+      body:`Life organizes flows but never perfectly. Proton gradients → ATP with slippage; survival as managed inefficiency.` },
+
+    { key:"branch", title:"S — Sociology (Branching)", subtitle:"Ontological metamorphoses",
+      meta:"Camus→Marx→Nietzsche→Pyromancer→Orwell",
+      y:760, color:getVar("--branch"),
+      body:`Plant/Absurd (psychedelic ontology) → Animal/Labor → Man (bridge to Übermensch) → Enterprise (decentralized intelligence) → System/Platform. Collisions surface new modes of being.` },
+
+    { key:"canopy", title:"M — Metaphysics (Canopy)", subtitle:"Neuron Pentad (emergence)",
+      meta:"Afferents: Faith, Despair, Ideology → Soma+Axon (Operational) → Efferents (Existential)",
+      y:570, color:getVar("--canopy"),
+      body:`Three inputs (faith amid entropy, despair at model failure, ideology as universal hazard-map) are spliced into action; outputs coordinate effectors across systems.` },
+
+    { key:"fruit",  title:"C — Computation (Fruit)", subtitle:"Coordination, recursion, storage",
+      meta:"Random e, Order y, Hazard h(t), Survival S(t), Memory m(t)",
+      y:380, color:getVar("--fruit"),
+      body:`Survival + memory loop into silicon (gigabytes). Recursion minimizes e without eliminating it; seeds the next cycle.` },
   ];
 
   // ---------- SVG helpers ----------
@@ -270,10 +292,10 @@
   function cbez(p0,p1,p2,p3){ return `M ${p0[0]},${p0[1]} C ${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${p3[0]},${p3[1]}`; }
   function r(seed){ seed = (seed*16807)%2147483647; return () => (seed = (seed*16807)%2147483647)/2147483647; }
 
-  let MODE = 0; // 0=Life, 1=Realms, 2=Plant→AI, 3=Pentad Companies, 4=GAMES
-  const MODE_NAMES = ["Life Stages", "Emergent Realms", "Plant → AI", "Pentad Companies", "GAMES Pentad"];
+  let MODE = 0; // 0=Life, 1=Realms, 2=Plant→AI, 3=Pentad Companies, 4=GAMES, 5=PBSMC
+  const MODE_NAMES = ["Life Stages", "Emergent Realms", "Plant → AI", "Pentad Companies", "GAMES Pentad", "PBSMC + Neuron Pentad"];
 
-  function active(){ return [LIFE, REALMS, PLANT_AI, PENTAD, GAMES][MODE]; }
+  function active(){ return [LIFE, REALMS, PLANT_AI, PENTAD, GAMES, PBSMC][MODE]; }
 
   function draw(seed=42){
     tree.innerHTML = ""; // clear
@@ -324,7 +346,6 @@
           const ox2=ox3-dir*(40+rand()*10);
           const oy2=oy3-6;
           path(cbez([ox0,oy0],[ox1,oy1],[ox2,oy2],[ox3,oy3]), {stroke:getVar("--branch"), "stroke-width":5-rr, opacity:.55});
-          // a little leaf haze
           circle(ox3,oy3, 12+rand()*10, {fill:getVar("--canopy"), opacity:.08+rand()*.06});
         }
       });
@@ -338,7 +359,7 @@
       circle(x,y,rr,{fill:getVar("--haze"), opacity:.04+rand()*.06});
     }
 
-    // Fruit + seeds (computational recursion metaphor)
+    // Fruit + seeds (recursion metaphor)
     for(let i=0;i<8;i++){
       const x=180+i*((W-360)/7);
       const y=320 + Math.sin(i*.8)*10;
@@ -349,31 +370,26 @@
     // Hotspots + labels from active dataset
     const cxLabel = W/2;
     active().forEach((layer)=>{
-      // halo
       circle(cxLabel,layer.y,54,{fill:"#ffffff", opacity:.02, class:"halo"});
-      // ring (accent ring for Pentad & GAMES modes)
       const strokeCol = ((MODE===3 || MODE===4) ? getVar("--accent") : layer.color);
       circle(cxLabel,layer.y,38,{fill:"none", stroke:strokeCol, "stroke-width":10, opacity:.9});
-      // labels
       text(cxLabel, layer.y-72, layer.title, {fill:getVar("--text"), "font-size":22, anchor:"middle"});
       text(cxLabel, layer.y-48, layer.subtitle, {fill:getVar("--dim"), "font-size":14, anchor:"middle"});
-      // interaction
       const hit=circle(cxLabel,layer.y,60,{fill:"#000", opacity:0, cursor:"pointer"});
       hit.addEventListener("click", ()=> openSheet(layer));
     });
 
-    // Corner badges: frailty + wearables when relevant
-    if(MODE===3){
+    // Corner badges (contextual)
+    if(MODE===3){ // Pentad companies
       cornerBadges([
         "Wearables (All ages): steps, HRV, sleep, cadence",
         "Frailty (75+): weight loss, grip, exhaustion, slowness, low activity"
       ]);
     }
-
-    if(MODE===4){
+    if(MODE===5){ // PBSMC
       cornerBadges([
-        "G = God → ground of value",
-        "E/S = Enterprise/System: platforms → ecologies",
+        "e = Y – ŷ (error/entropy) threads every layer",
+        "Metamorphoses: Camus→Marx→Nietzsche→Pyromancer→Orwell"
       ]);
     }
   }
@@ -433,19 +449,30 @@
     MODE = next;
     const btn = document.getElementById("mode");
     btn.textContent = "⇄ Switch Mode";
-    subtitle.innerHTML = `Mode: <strong>${MODE_NAMES[MODE]}</strong> — fractal role of <strong>Ukubona LLC</strong> within a five-company stack. (press <span class="kbd">M</span> to switch)`;
+    subtitle.innerHTML = `Mode: <strong>${MODE_NAMES[MODE]}</strong> — fractal role of <strong>Ukubona LLC</strong> across stacked ontologies. (press <span class="kbd">M</span> to switch)`;
     draw(Math.floor(Math.random()*1e6));
   }
 
   // init
   draw(42);
   document.getElementById("randomize").onclick = () => draw(Math.floor(Math.random()*1e6));
-  document.getElementById("mode").onclick = () => setMode((MODE + 1) % 5);
+  document.getElementById("mode").onclick = () => setMode((MODE + 1) % 6);
+  document.getElementById("help").onclick = () => {
+    sTitle.textContent = "How to use";
+    sSub.textContent = "Keyboard & interaction";
+    sBody.innerHTML = `
+      <p><span class="badge">M</span> Switch modes (6 total), <span class="badge">R</span> Randomize branch geometry.</p>
+      <p>Click any ring to open its detail sheet.</p>
+      <p>Modes include: Life Stages, Emergent Realms, Plant→AI, Pentad Companies, GAMES Pentad, and PBSMC + Neuron Pentad.</p>
+      <p>PBSMC integrates: Physics → Biology → Sociology → Metaphysics (Neuron Pentad) → Computation, with <em>e = Y – ŷ</em> threading every layer.</p>`;
+    sMeta.textContent = "";
+    sheet.classList.add("open");
+  };
 
   // keyboard shortcuts
   window.addEventListener("keydown", (e)=>{
     if(e.key.toLowerCase()==='r') draw(Math.floor(Math.random()*1e6));
-    if(e.key.toLowerCase()==='m') setMode((MODE + 1) % 5);
+    if(e.key.toLowerCase()==='m') setMode((MODE + 1) % 6);
     if(e.key==='Escape') sheet.classList.remove('open');
   });
 </script>
