@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,6 +42,10 @@
   .badge{display:inline-block; padding:2px 6px; border:1px solid #2a2f33; border-radius:8px; font-size:11px; margin-right:6px}
   .foot-chorus{max-width:1200px;margin:14px auto 40px; padding:8px 16px; font-size:12px; color:#bcd6cd; opacity:.9}
   .foot-chorus p{margin:6px 0}
+  .pill{display:inline-block; padding:2px 8px; border:1px solid #2a2f33; border-radius:999px; font-size:11px; margin:0 6px 0 0; color:#a9b6ae}
+  .hr{height:1px; background:#20262a; margin:14px 0}
+  .ul{padding-left:18px}
+  .ul li{margin:8px 0}
 </style>
 </head>
 <body>
@@ -58,6 +63,7 @@
         <button class="chip" id="randomize">↻ Randomize branches</button>
         <span class="chip"><span class="sw" style="background:var(--gauge)"></span>Dynamometer (2025)</span>
         <span class="chip"><span class="sw" style="background:var(--accent)"></span>Schrödinger Pentad</span>
+        <button class="chip" id="togglePrompts">❓ Panel Prompts</button>
       </div>
 
       <svg id="scene" viewBox="0 0 1000 1200" role="img" aria-label="Ukubona Truth Tree">
@@ -81,7 +87,7 @@
 
       <div class="legend" id="legend"></div>
     </div>
-    <p class="hint">Tip: click any ring to open details. Press <span class="kbd">R</span> to randomize branches, <span class="kbd">M</span> to toggle modes.</p>
+    <p class="hint">Tip: click any ring to open details (and prompts if enabled). Press <span class="kbd">R</span> to randomize branches, <span class="kbd">M</span> to toggle modes.</p>
   </div>
 
   <aside id="sheet" class="sheet" aria-hidden="true">
@@ -89,6 +95,8 @@
     <h2 id="sTitle">Layer</h2>
     <p id="sSub" class="subline"></p>
     <div id="sBody" class="body"></div>
+    <div class="hr"></div>
+    <div id="sPrompts" class="body" style="display:none"></div>
     <p id="sMeta" class="subline" style="margin-top:16px; font-style:italic"></p>
   </aside>
 
@@ -98,6 +106,8 @@
 
 <script>
   // ---------- Data ----------
+  function getVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
   // LIFE STAGES
   const LIFE = [
     { key:"roots",  title:"Roots / Ukuvula",  subtitle:"Diet — Foundation",
@@ -235,7 +245,7 @@
     { key:"fruit",  title:"System (Fruit)", subtitle:"Orchestration — recursion & emergence",
       meta:"Feedback, resilience, self-improvement",
       y:380, color:getVar("--fruit"),
-      body:`When platforms harden into environments that write their own successors. The API gives way to the ecology; the double-helix of Marx (production relations) and Nietzsche (value-creation) twists into continuous redesign.` },
+      body:`When platforms harden into environments that write their own successors. The API gives way to the ecology; the double-helix of production relations and value-creation twists into continuous redesign.` },
   ];
 
   // DYNAMOMETER (2025)
@@ -246,7 +256,7 @@
       body:`Foundation: gradients everywhere; no stillness. Aesthetic vitality = distance from zero.` },
 
     { key:"trunk", title:"Gradients in Biology", subtitle:"Frailty ↔ Vitality",
-      meta:"Linda Fried phenotype ↔ wearables (gait, HRV)",
+      meta:"Fried phenotype ↔ wearables (gait, HRV)",
       y:930, color:getVar("--trunk"), gauge:0.25,
       body:`Vitality measured as movement and recovery. Dynamometer at the organism level.` },
 
@@ -256,12 +266,12 @@
       body:`Collision theatre: Silicon Valley & global AI labs. Fertile when friction is high; ugly when bloat stalls flow.` },
 
     { key:"canopy", title:"Microsoft — Emergence (2025)", subtitle:"Order that amplifies power",
-      meta:"Azure ~>$75B/yr; capex guide ~$30B; >$4T market value (mid-2025)",
+      meta:"Ecosystems, standards, cloud",
       y:570, color:getVar("--canopy"), gauge:0.85,
       body:`Ecosystem returns from AI spend become visible: cloud growth accelerates; capital outlays expand the field. Emergence reads as vitality on the gauge.` },
 
     { key:"fruit", title:"NVIDIA — Recursion (2025)", subtitle:"GPUs → AI → GPUs",
-      meta:"FY25 revenue ~$130.5B; market cap ~>$4.3–$4.4T (Aug 2025)",
+      meta:"Feedback loop driving the stack",
       y:380, color:getVar("--fruit"), gauge:1.00,
       body:`Recursion loop drives the whole stack. Off-scale vitality as supply, demand, and compute co-accelerate.` },
   ];
@@ -289,10 +299,65 @@
       body:`From collisions to coherent platforms. Emergent order reads as vitality on the gauge.`},
 
     { key:"fruit", title:"NVIDIA (Recursion)", subtitle:"GPUs → AI → GPUs",
-      meta:"Feedback loop driving the stack",
+      meta:"Supply↔demand tightening the loop",
       y:380, color:getVar("--fruit"),
-      body:`Self-acceleration via recursion; off-scale gauge when supply↔demand tighten the loop.`},
+      body:`Self-acceleration via recursion; off-scale gauge when the loop closes faster than governance can adapt.`},
   ];
+
+  // ---------- Panel Prompts (Pam) ----------
+  // generic prompts per layer (used for most modes)
+  const PROMPTS_GENERIC = {
+    roots: [
+      ["Name the hard constraint.", "What physics/infra bottleneck gates outcomes? (e.g., cold chain, road access, spectrum)"],
+      ["Quantify the gradient.", "How big is the 'today→target' delta we’re financing?"],
+      ["Price the error.", "What’s the climate/FX/operational buffer baked into terms?"],
+      ["Minimum viable collision.", "Which two actors must meet to unlock flow?"]
+    ],
+    trunk: [
+      ["Match cashflows to biology.", "Do grace periods and amortization align with actual cycles (harvest, recovery, school terms)?"],
+      ["Instrument vitality.", "Which telemetry (gait, HRV, uptime) feeds risk/repricing?"],
+      ["Reduce friction, not IQ.", "What process step are we deleting for users (forms, travel, queues)?"],
+      ["Skill as capex.", "What training is bundled and who pays on failure?"]
+    ],
+    branch: [
+      ["Force productive collisions.", "Which interfaces are contractually required (API, coop, public capex hook)?"],
+      ["Finance the delta, not the logo.", "Show the KPI pattern you fund (e.g., post-harvest loss ↓, export $/kWh ↑)."],
+      ["Experiment safely.", "What learning tranche flips based on observed behavior?"],
+      ["Steer the crowd.", "What nudge/game mechanic makes the right action default?"]
+    ],
+    canopy: [
+      ["Publish the pattern.", "Which 3 shared KPIs roll up across projects?"],
+      ["Sequence public→private.", "What public milestone unblocks disbursement?"],
+      ["Who owns the switch?", "Which pre-committed rule adjusts terms when shocks hit?"],
+      ["Data as collateral.", "Which datasets lower next-cycle pricing?"]
+    ],
+    fruit: [
+      ["Close the loop.", "Where do repayments/data recycle into cheaper capital?"],
+      ["Hazard & survival.", "Show h(t)/S(t) curves—where does hazard spike?"],
+      ["Legacy without lock-in.", "How do we avoid platform ossification?"],
+      ["Seed the next cycle.", "What’s the handoff to new entrants/regions?"]
+    ]
+  };
+
+  // sharp, mode-specific prompts for DYNAMOMETER → Ukukona (branch)
+  const PROMPTS_DYNAMO_BRANCH = [
+    ["Name the collision field.", "Which arena (e.g., agri value chain, DPI onboarding, district clinics) will you densify with actors this quarter?"],
+    ["Quantify flow strength (gauge).", "What % increase in transaction rate/throughput marks 'vital'? What’s the threshold for 'ugly' (stagnation)?"],
+    ["Contract for collisions.", "Which MOUs/APIs must be live before first disbursement? (Public capex, supplier platforms, payments rails)"],
+    ["Price exploration.", "What % of the window is an explicit learning tranche with auto-rules to scale/kill?"],
+    ["Publish the crowd game.", "What visible scoreboard/leaderboard nudges behavior (default good action, social proof)?"]
+  ];
+
+  // simple renderer to <ul>
+  function renderPrompts(list){
+    const ul = document.createElement("ul"); ul.className="ul";
+    list.forEach(([q,ex])=>{
+      const li=document.createElement("li");
+      li.innerHTML = `<strong>${q}</strong><br/><em>${ex}</em>`;
+      ul.appendChild(li);
+    });
+    return ul.outerHTML;
+  }
 
   // ---------- SVG helpers ----------
   const svgNS = "http://www.w3.org/2000/svg";
@@ -303,9 +368,16 @@
   const sSub   = document.getElementById("sSub");
   const sBody  = document.getElementById("sBody");
   const sMeta  = document.getElementById("sMeta");
-  document.getElementById("closeSheet").onclick = () => sheet.classList.remove("open");
+  const sPrompts = document.getElementById("sPrompts");
+  let PROMPTS_ON = true;
 
-  function getVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  document.getElementById("closeSheet").onclick = () => sheet.classList.remove("open");
+  document.getElementById("togglePrompts").onclick = () => {
+    PROMPTS_ON = !PROMPTS_ON;
+    document.getElementById("togglePrompts").textContent = PROMPTS_ON ? "❓ Panel Prompts" : "❔ Prompts Off";
+    if(!PROMPTS_ON) sPrompts.style.display="none";
+  };
+
   function cbez(p0,p1,p2,p3){ return `M ${p0[0]},${p0[1]} C ${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${p3[0]},${p3[1]}`; }
   function r(seed){ seed = (seed*16807)%2147483647; return () => (seed = (seed*16807)%2147483647)/2147483647; }
 
@@ -416,9 +488,8 @@
     }
     if(MODE===5){
       cornerBadges([
-        "Microsoft (Emergence): Azure >~$75B/yr; capex guide ~$30B/qtr",
-        "NVIDIA (Recursion): FY25 rev ~$130.5B; market cap >~$4.3T",
-        "Aesthetic vitality = distance from zero (flow strength)"
+        "Dynamometer: gauge = flow strength (distance from zero)",
+        "Ukukona focus: collisions drive vitality (avoid bloat)"
       ]);
     }
     if(MODE===6){
@@ -451,9 +522,26 @@
     sTitle.textContent = layer.title;
     sSub.textContent   = layer.subtitle;
     sBody.textContent  = layer.body;
+
+    // choose prompts
+    let prompts = PROMPTS_GENERIC[layer.key] || [];
+    if(MODE===5 && layer.key==="branch") prompts = PROMPTS_DYNAMO_BRANCH;
+
+    if(PROMPTS_ON && prompts.length){
+      sPrompts.style.display = "block";
+      sPrompts.innerHTML =
+        `<div class="pill">Pam Panel Prompts</div>` +
+        renderPrompts(prompts) +
+        `<div class="hr"></div><div class="pill">How to use</div> Click a ring, skim 4–5 bullets, pick 1 zinger to steer Q&A.`;
+    } else {
+      sPrompts.style.display = "none";
+      sPrompts.innerHTML = "";
+    }
+
     const stackMeta = (MODE===3||MODE===4) ? " — Stack: 5 companies (Ukubona = nervous system). Region: North America → Global." : "";
-    const dateMeta  = (MODE===5) ? " — Benchmarks as of 2025-08-27 (illustrative)." : "";
+    const dateMeta  = (MODE===5) ? " — Benchmarks illustrative for 2025." : "";
     sMeta.textContent  = "Meta: " + layer.meta + stackMeta + dateMeta;
+
     sheet.classList.add("open");
     sheet.setAttribute("aria-hidden","false");
   }
