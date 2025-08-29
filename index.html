@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,6 +45,17 @@
   .hr{height:1px; background:#20262a; margin:14px 0}
   .ul{padding-left:18px}
   .ul li{margin:8px 0}
+
+  /* --- Nudge Library styles --- */
+  .nudges{display:grid; grid-template-columns:1fr; gap:10px; margin-top:8px}
+  .nudge{border:1px solid #223038; border-radius:12px; padding:10px; background:#0b1114}
+  .nudge h4{margin:0 0 6px; font-size:14px}
+  .nudge small{color:#8fa7a0}
+  .nudge .row{margin:6px 0}
+  .nudge .lbl{display:inline-block; min-width:78px; color:#a9b6ae}
+  .copy{margin-top:8px; display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:8px; border:1px solid #2a2f33; background:#0e1316; color:#cfe0d8; font-size:12px; cursor:pointer}
+  .copy:active{transform:translateY(1px)}
+  .ok{border-color:#2a4; color:#bfe5c8}
 </style>
 </head>
 <body>
@@ -114,22 +124,18 @@
       meta:"Provisioning — energy & matter from earth & sun",
       y:1120, color:getVar("--root"),
       body:`Infancy & Early Childhood — Intake, sensory learning, nutrition. All later growth is contingent on richness and balance here.` },
-
     { key:"trunk",  title:"Trunk / Ukuzula",  subtitle:"Fitness — Structure",
       meta:"Embodiment — capacity, stamina, coordination",
       y:930, color:getVar("--trunk"),
       body:`Childhood → Adolescence — Building strength, stability, and motor intelligence. Movement is the conduit between environment and self.` },
-
     { key:"branch", title:"Branching / Ukukona", subtitle:"Games — Exploration",
       meta:"Cognition & culture — agency & strategy",
       y:760, color:getVar("--branch"),
       body:`Young Adulthood — Cognitive/social exploration; testing rules and inventing new ones. Divergence and emergent strategy take root.` },
-
     { key:"canopy", title:"Canopy / Ukubona", subtitle:"Health — Integration",
       meta:"Whole-system perception — context & horizon",
       y:570, color:getVar("--canopy"),
       body:`Mature Adulthood — Integrating domains into a coherent worldview of wellbeing. Decisions with context and longer horizons.` },
-
     { key:"fruit",  title:"Fruit / Ukukula",  subtitle:"Aging — Legacy",
       meta:"Recursion — harvest → seeds → next cycle",
       y:380, color:getVar("--fruit"),
@@ -142,22 +148,18 @@
       meta:"Conservation, symmetry, interactions",
       y:1120, color:getVar("--root"),
       body:`First principles set the filesystem of reality. Material/energetic substrate enables everything above.` },
-
     { key:"trunk",  title:"Biology (Trunk)",  subtitle:"Epistemology — bounded mind",
       meta:"Embodied sensing; limited bandwidth & context length",
       y:930, color:getVar("--trunk"),
       body:`Life must perceive, filter, and make meaning to survive under constraints, turning sensing into adaptive knowledge.` },
-
     { key:"branch", title:"Social (Branching)", subtitle:"Agency — feedback loops",
       meta:"Cooperation, competition, signaling, trust",
       y:760, color:getVar("--branch"),
       body:`Multiple agents with overlapping but distinct goals form norms, institutions, and collective memory across scales.` },
-
     { key:"canopy", title:"Mathematical (Canopy)", subtitle:"Simulation — compressed time",
       meta:"Abstraction, generalization, optimization",
       y:570, color:getVar("--canopy"),
       body:`Models accelerate exploration by trading fidelity for tractability; parallel twins let us rehearse futures before acting.` },
-
     { key:"fruit",  title:"Computational (Fruit)",  subtitle:"Strategic intelligence — recursion",
       meta:"Algorithms encode fruit→seed logic",
       y:380, color:getVar("--fruit"),
@@ -170,22 +172,18 @@
       meta:"Phototrophy, distributed sensing",
       y:1120, color:getVar("--root"),
       body:"Energy capture, structural growth, environmental sensing without locomotion." },
-
     { key:"trunk",  title:"Animal (Trunk)", subtitle:"Biology",
       meta:"Locomotion, nervous coordination",
       y:930, color:getVar("--trunk"),
       body:"Mobility, adaptive behavior, predator–prey arms races." },
-
     { key:"branch", title:"Man (Branching)", subtitle:"Social",
       meta:"Language, culture, tools",
       y:760, color:getVar("--branch"),
       body:"Symbolic thought, cooperation, institutions." },
-
     { key:"canopy", title:"Equations (Canopy)", subtitle:"Mathematical",
       meta:"Abstraction, generalization",
       y:570, color:getVar("--canopy"),
       body:"Predictive models, optimization, compressed time." },
-
     { key:"fruit",  title:"AI (Fruit)", subtitle:"Computational",
       meta:"Recursion, synthetic learning",
       y:380, color:getVar("--fruit"),
@@ -198,22 +196,18 @@
       meta:"Company 1 of 5 — Foundation / North America→Global",
       y:1120, color:getVar("--root"),
       body:`Provisioning of energy & matter: nutrition, housing, environment. Interfaces with public health & retail supply chains.` },
-
     { key:"trunk",  title:"Ukuzula — Mobility & Fitness Analytics", subtitle:"Trunk (movement)",
       meta:"Company 2 of 5 — Wearables, gait, VO₂ proxy",
       y:930, color:getVar("--trunk"),
       body:`Mobility telemetry: walking speed distributions, step cadence, lower-bound vitality estimates. Feeds risk engines across ages.` },
-
     { key:"branch", title:"Ukukona — Play & Games", subtitle:"Branching (experimentation)",
       meta:"Company 3 of 5 — Behavioral economics & habit loops",
       y:760, color:getVar("--branch"),
       body:`Behavior shaping via games, social incentives, and micro-commitments. Experimentation layer for population-scale habit change.` },
-
     { key:"canopy", title:"Ukubona — Health Integration (Nervous System)", subtitle:"Canopy (integration)",
       meta:"Company 4 of 5 — System orchestration / beyond the brain",
       y:570, color:getVar("--canopy"),
       body:`Network (Beyond the Brain) — Systemic Regulation: aggregates tactical, informational, and strategic inputs into operational code; coordinates payers, providers, rehab, and home care to preserve agency.` },
-
     { key:"fruit",  title:"Ukukula — Aging & Legacy",  subtitle:"Fruit (recursion)",
       meta:"Company 5 of 5 — Frailty prevention, end-of-life dignity",
       y:380, color:getVar("--fruit"),
@@ -226,22 +220,18 @@
       meta:"Cosmos, constraint, sacred substrate",
       y:1120, color:getVar("--root"),
       body:`Primordial order and limit. The pre-contract that reality writes: thermodynamics, time, and scarcity. Nietzsche’s earth against sky-castles.` },
-
     { key:"trunk",  title:"Animal (Trunk)", subtitle:"Embodiment — instinct & movement",
       meta:"Perception–action loops; survival",
       y:930, color:getVar("--trunk"),
       body:`Drives, fitness, and bounded rationality. Where vitality is computed in gait, cadence, and recovery.` },
-
     { key:"branch", title:"Man (Branching)", subtitle:"Agency — culture & tools",
       meta:"Language, coordination, institutions",
       y:760, color:getVar("--branch"),
       body:`Symbolic play and norm-making. The worker/serf/API roles arise here—interfaces between will and infrastructure.` },
-
     { key:"canopy", title:"Enterprise (Canopy)", subtitle:"Organization — projects & platforms",
       meta:"Firms, platforms, governance",
       y:570, color:getVar("--canopy"),
       body:`Collective intent scaled. Platforms compress many human games into protocols; capital and code braid together.` },
-
     { key:"fruit",  title:"System (Fruit)", subtitle:"Orchestration — recursion & emergence",
       meta:"Feedback, resilience, self-improvement",
       y:380, color:getVar("--fruit"),
@@ -254,22 +244,18 @@
       meta:"All that exists is flow down gradients",
       y:1120, color:getVar("--root"), gauge:0.15,
       body:`Foundation: gradients everywhere; no stillness. Aesthetic vitality = distance from zero.` },
-
     { key:"trunk", title:"Gradients in Biology", subtitle:"Frailty ↔ Vitality",
       meta:"Fried phenotype ↔ wearables (gait, HRV)",
       y:930, color:getVar("--trunk"), gauge:0.25,
       body:`Vitality measured as movement and recovery. Dynamometer at the organism level.` },
-
     { key:"branch", title:"Ukukona — Collisions", subtitle:"Venture, research, talent",
       meta:"Creative destruction; games of agency",
       y:760, color:getVar("--branch"), gauge:0.45,
       body:`Collision theatre: Silicon Valley & global AI labs. Fertile when friction is high; ugly when bloat stalls flow.` },
-
     { key:"canopy", title:"Microsoft — Emergence (2025)", subtitle:"Order that amplifies power",
       meta:"Ecosystems, standards, cloud",
       y:570, color:getVar("--canopy"), gauge:0.85,
       body:`Ecosystem returns from AI spend become visible: cloud growth accelerates; capital outlays expand the field. Emergence reads as vitality on the gauge.` },
-
     { key:"fruit", title:"NVIDIA — Recursion (2025)", subtitle:"GPUs → AI → GPUs",
       meta:"Feedback loop driving the stack",
       y:380, color:getVar("--fruit"), gauge:1.00,
@@ -282,22 +268,18 @@
       meta:"Platonic ideal vs. Heraclitean flux",
       y:1120, color:getVar("--root"),
       body:`Perfect information imagined, never frozen in reality. Mutations & epigenetics keep it in motion.`},
-
     { key:"trunk", title:"ATP (Gradients)", subtitle:"Energy differences drive life",
       meta:"Proton pumps, membrane potentials",
       y:930, color:getVar("--trunk"),
       body:`Vitality = strength of gradients. No flow, no life; absolute zero is unattainable.`},
-
     { key:"branch", title:"Silicon Valley (Collisions) / Ukukona", subtitle:"Chaotic flux of ideas & failure",
       meta:"Creative destruction; agency games",
       y:760, color:getVar("--branch"),
       body:`Beauty = dynamism & fertility; ugliness = stagnation & bloat. Collision is health.`},
-
     { key:"canopy", title:"Microsoft (Emergence)", subtitle:"Order that amplifies power",
       meta:"Ecosystems, standards, cloud",
       y:570, color:getVar("--canopy"),
       body:`From collisions to coherent platforms. Emergent order reads as vitality on the gauge.`},
-
     { key:"fruit", title:"NVIDIA (Recursion)", subtitle:"GPUs → AI → GPUs",
       meta:"Supply↔demand tightening the loop",
       y:380, color:getVar("--fruit"),
@@ -305,7 +287,6 @@
   ];
 
   // ---------- Panel Prompts (Pam) ----------
-  // generic prompts per layer (used for most modes)
   const PROMPTS_GENERIC = {
     roots: [
       ["Name the hard constraint.", "What physics/infra bottleneck gates outcomes? (e.g., cold chain, road access, spectrum)"],
@@ -339,16 +320,74 @@
     ]
   };
 
-  // sharp, mode-specific prompts for DYNAMOMETER → Ukukona (branch)
-  const PROMPTS_DYNAMO_BRANCH = [
-    ["Name the collision field.", "Which arena (e.g., agri value chain, DPI onboarding, district clinics) will you densify with actors this quarter?"],
-    ["Quantify flow strength (gauge).", "What % increase in transaction rate/throughput marks 'vital'? What’s the threshold for 'ugly' (stagnation)?"],
-    ["Contract for collisions.", "Which MOUs/APIs must be live before first disbursement? (Public capex, supplier platforms, payments rails)"],
-    ["Price exploration.", "What % of the window is an explicit learning tranche with auto-rules to scale/kill?"],
-    ["Publish the crowd game.", "What visible scoreboard/leaderboard nudges behavior (default good action, social proof)?"]
+  // --- Nudge/Game Mechanic Library (shown on BRANCH layer) ---
+  const NUDGES = [
+    {
+      name: "One-tap default",
+      def: "Primary action pre-selected; confirm to proceed.",
+      when: "Low-risk, frequent behaviors (check-in, hydrate, take walk).",
+      measure: "Completion rate, time-to-action.",
+      guard: "Easy, visible undo; rate-limit auto-nudges.",
+      snippet: `Default: preselect 'good' action; one-tap confirm.\nWhen: low-risk, high-frequency steps.\nMeasure: completion %, time-to-act.\nAnti-abuse: clear undo + rate limits.`
+    },
+    {
+      name: "Soft pre-commit",
+      def: "Tiny pledge (no deposit) with public micro-signal.",
+      when: "New habit start; early cohorts.",
+      measure: "7/28-day retention, streak length.",
+      guard: "One-click opt-out; no shaming copy.",
+      snippet: `Default: pledge on by default; user can opt out.\nWhen: habit formation kickoff.\nMeasure: D7/D28 retention, streak.\nAnti-abuse: opt-out visible; neutral tone.`
+    },
+    {
+      name: "Social proof ribbon",
+      def: "Show ‘Most peers choose X’ inline.",
+      when: "Ambiguity; many acceptable options.",
+      measure: "Choice share shift vs. control.",
+      guard: "Never fabricate; cap % text.",
+      snippet: `Default: display peer majority for target choice.\nWhen: ambiguous decisions.\nMeasure: delta in selection share.\nAnti-abuse: audited counts; avoid overclaim.`
+    },
+    {
+      name: "Loss-framed escrow",
+      def: "Tiny refundable hold released on completion.",
+      when: "Medium-stakes tasks; motivated users.",
+      measure: "Completion %, refund rate.",
+      guard: "Hard cap; hardship bypass.",
+      snippet: `Default: small refundable hold; auto-release on done.\nWhen: medium-stakes tasks.\nMeasure: completion %, refunds.\nAnti-abuse: caps + bypass routes.`
+    },
+    {
+      name: "Cooldown & lock-in",
+      def: "Default keeps good choice; reverse requires pause.",
+      when: "Prevent backsliding after success.",
+      measure: "Reversion rate, relapse cycles.",
+      guard: "Visible timer; emergency override.",
+      snippet: `Default: keep good state; reversal waits cooldown.\nWhen: post-success consolidation.\nMeasure: relapse rate.\nAnti-abuse: show timer; override for emergencies.`
+    },
+    {
+      name: "Deadline with soft auto-submit",
+      def: "If silent at T, submit best-known ‘good’ draft.",
+      when: "Docs/forms that decay with delay.",
+      measure: "On-time share, correction rate.",
+      guard: "Preview window; easy retract.",
+      snippet: `Default: auto-submit at deadline if silent.\nWhen: forms where delay hurts.\nMeasure: on-time %, edits-after.\nAnti-abuse: preview + retract window.`
+    },
+    {
+      name: "Lottery micro-incentive",
+      def: "Tiny EV boost via randomized reward for ‘good’.",
+      when: "Low-cost, high-engagement tasks.",
+      measure: "Task picks per user/day.",
+      guard: "Transparent odds; EV disclosure.",
+      snippet: `Default: entry to small lottery on completion.\nWhen: low-cost engagement.\nMeasure: completions/user.\nAnti-abuse: publish odds + EV.`
+    },
+    {
+      name: "Bucketed friction",
+      def: "Add micro-friction to bad choice only.",
+      when: "We want deterrence, not bans.",
+      measure: "Bad-choice drop-off.",
+      guard: "Accessibility-safe; time caps.",
+      snippet: `Default: extra step only on bad choice.\nWhen: deter without banning.\nMeasure: bad-choice rate.\nAnti-abuse: a11y checks; cap delay.`
+    }
   ];
 
-  // simple renderer to <ul>
   function renderPrompts(list){
     const ul = document.createElement("ul"); ul.className="ul";
     list.forEach(([q,ex])=>{
@@ -357,6 +396,45 @@
       ul.appendChild(li);
     });
     return ul.outerHTML;
+  }
+
+  function renderNudges(){
+    const wrap = document.createElement("div");
+    wrap.innerHTML = `<div class="pill">Nudge Library — “make right action default”</div>`;
+    const grid = document.createElement("div"); grid.className = "nudges";
+    NUDGES.forEach(n=>{
+      const card = document.createElement("div"); card.className="nudge";
+      card.innerHTML = `
+        <h4>${n.name}</h4>
+        <div class="row"><span class="lbl">Default</span> <small>${n.def}</small></div>
+        <div class="row"><span class="lbl">When</span> <small>${n.when}</small></div>
+        <div class="row"><span class="lbl">Measure</span> <small>${n.measure}</small></div>
+        <div class="row"><span class="lbl">Anti-abuse</span> <small>${n.guard}</small></div>
+        <button class="copy" data-snippet="${n.snippet.replace(/"/g,'&quot;')}">Copy template</button>
+      `;
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);
+    // delegate copy handlers
+    setTimeout(()=>{
+      wrap.querySelectorAll(".copy").forEach(btn=>{
+        btn.addEventListener("click", async (e)=>{
+          const s = btn.getAttribute("data-snippet");
+          try{
+            await navigator.clipboard.writeText(s);
+            btn.classList.add("ok"); btn.textContent="✓ Copied";
+            setTimeout(()=>{ btn.classList.remove("ok"); btn.textContent="Copy template"; }, 1200);
+          }catch(err){
+            // fallback: select & copy via textarea
+            const ta=document.createElement("textarea"); ta.value=s; document.body.appendChild(ta);
+            ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+            btn.classList.add("ok"); btn.textContent="✓ Copied";
+            setTimeout(()=>{ btn.classList.remove("ok"); btn.textContent="Copy template"; }, 1200);
+          }
+        });
+      });
+    },0);
+    return wrap.outerHTML;
   }
 
   // ---------- SVG helpers ----------
@@ -519,23 +597,27 @@
   }
 
   function openSheet(layer){
+    const isBranch = layer.key==="branch";
     sTitle.textContent = layer.title;
     sSub.textContent   = layer.subtitle;
     sBody.textContent  = layer.body;
 
     // choose prompts
     let prompts = PROMPTS_GENERIC[layer.key] || [];
-    if(MODE===5 && layer.key==="branch") prompts = PROMPTS_DYNAMO_BRANCH;
+    if(MODE===5 && layer.key==="branch"){
+      // keep your sharp Ukukona prompts under Dynamometer if you add a mode-specific set later
+    }
 
     if(PROMPTS_ON && prompts.length){
       sPrompts.style.display = "block";
       sPrompts.innerHTML =
         `<div class="pill">Pam Panel Prompts</div>` +
         renderPrompts(prompts) +
+        (isBranch ? `<div class="hr"></div>${renderNudges()}` : ``) +
         `<div class="hr"></div><div class="pill">How to use</div> Click a ring, skim 4–5 bullets, pick 1 zinger to steer Q&A.`;
     } else {
-      sPrompts.style.display = "none";
-      sPrompts.innerHTML = "";
+      sPrompts.style.display = isBranch ? "block" : "none";
+      sPrompts.innerHTML = isBranch ? renderNudges() : "";
     }
 
     const stackMeta = (MODE===3||MODE===4) ? " — Stack: 5 companies (Ukubona = nervous system). Region: North America → Global." : "";
